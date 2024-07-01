@@ -3,7 +3,7 @@ cmake_minimum_required(
     3.28.0
 )
 
-project(sfml_test1 
+project(game1
     VERSION 
     0.1.0 
     LANGUAGES 
