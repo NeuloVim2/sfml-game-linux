@@ -26,5 +26,16 @@
                 "CMAKE_BUILD_TYPE": "Debug"
             }
         }
+    ],
+    "testPresets": [
+        {
+            "name": "windows-test",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "windows-preset",
+            "output": {
+                "verbosity": "verbose"
+            }
+        }
     ]
 }

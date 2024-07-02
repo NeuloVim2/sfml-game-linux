@@ -14,5 +14,11 @@ project(game1
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+message("Set BUILD_SHARED_LIBS to ${BUILD_SHARED_LIBS}")
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+
+enable_testing()
+
 add_subdirectory(lib)
 add_subdirectory(src)
+add_subdirectory(test)
