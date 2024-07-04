@@ -1,6 +1,6 @@
 add_executable(vector_test vector_test.cpp)
 
-target_link_libraries(vector_test gtest gtest_main gmock)
+target_link_libraries(vector_test gtest gtest_main gmock vector)
 
 message("Project source dir value: ${PROJECT_SOURCE_DIR}")
 

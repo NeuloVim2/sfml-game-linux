@@ -5,6 +5,8 @@
 #include <imgui-SFML.h>
 #include <imgui.h>
 
+#include "include/vector.h"
+
 int main() {
     sf::RenderWindow window(sf::VideoMode(1280, 720), "ImGui + SFML = <3");
     window.setFramerateLimit(60);
