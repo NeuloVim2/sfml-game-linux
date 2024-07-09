@@ -13,6 +13,10 @@ public:
     // Vector operator=(const float* arr);
     Vector operator+(const Vector& operand);
 
+    Vector& add(const Vector& operand);
+    Vector& add(const float x,  const float y);
+    Vector& add(const float *comps);
+
 // const int * ptr // pointer to const int
 // int const * ptr // pointer to const int
 // int * const ptr // const pointer to int

@@ -12,3 +12,22 @@ Vector Vector::operator+(const Vector& vector) {
 
     return temp;
 }
+
+Vector& Vector::add(const Vector& operand) {
+    this->x += operand.x;
+    this->y += operand.y;
+    return *this; 
+}
+
+Vector& Vector::add(const float x, const float y) {
+    this->x += x;
+    this->y += y;
+    return *this; 
+}
+
+Vector& Vector::add(const float *comps) {
+    this->x += comps[0];
+    this->y += comps[1];
+
+    return *this;
+};
