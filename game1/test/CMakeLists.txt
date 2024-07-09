@@ -1,5 +1,10 @@
 add_executable(vector_test vector_test.cpp)
 
+# target_include_directories(vector_test
+#                            PUBLIC 
+#                            ${PROJECT_SOURCE_DIR}/include/vector      
+# )
+
 target_link_libraries(vector_test gtest gtest_main gmock vector)
 
 message("Project source dir value: ${PROJECT_SOURCE_DIR}")
