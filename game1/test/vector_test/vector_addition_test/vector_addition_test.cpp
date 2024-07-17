@@ -3,19 +3,7 @@
 
 #include "vector.h"
 
-//TODO: add support for Vector copy assignment(Vector a = Vector b) 
-
-//TODO: add support for Vector creation with empty constructor. Done 
-//TODO: add support for Vecotor creation with cosnstructor accpepting x and y as arguments. Done 
-
-//TODO: add vector addition support for Vector. Done
-//TODO: add method for Vecotor to add  another Vector as argument. Done
-//TODO: add method for Vecotor to add x and y components as arguments. Done
-//TODO: add support for additon of two Vectors with use of + operator. Done
-
-//TODO: add support for Vecotor to add x and y components as arguments. Done
-//TODO: add support for Vector for assignment x and y components as array. Done
-TEST(VectorLib, shouldAddTwoVectorsWithUseOfPlusSign) {
+TEST(VectorLibAddition, AddTwoVectorsWithUseOfPlusSign) {
 
   // Use uniform intialisation
   Vector leftOperand {1.0f, 2.0f};
@@ -26,10 +14,9 @@ TEST(VectorLib, shouldAddTwoVectorsWithUseOfPlusSign) {
   // Expect two strings not to be equal.
   EXPECT_THAT(result.x, testing::Eq(2.0f));
   EXPECT_THAT(result.y, testing::Eq(4.0f));
-  // EXPECT_STREQ("some", "value");
 }
 
-TEST(VectorLib, shouldAddTwoVectorsWithUseOfAddMethod) {
+TEST(VectorLibAddition, AddTwoVectorsWithUseOfAddMethod) {
 
   // Use uniform intialisation
   Vector leftOperand {2.0f, 5.0f};
@@ -40,10 +27,9 @@ TEST(VectorLib, shouldAddTwoVectorsWithUseOfAddMethod) {
   // Expect two strings not to be equal.
   EXPECT_THAT(result.x, testing::Eq(2.0f));
   EXPECT_THAT(result.y, testing::Eq(9.0f));
-  // EXPECT_STREQ("some", "value");
 }
 
-TEST(VectorLib, shouldAddToVectorXYComponentsWithUseOfAddMethod) {
+TEST(VectorLibAddition, AddToVectorXYComponentsWithUseOfAddMethod) {
 
   // Use uniform intialisation
   Vector leftOperand {2.0f, 5.0f};
@@ -53,10 +39,9 @@ TEST(VectorLib, shouldAddToVectorXYComponentsWithUseOfAddMethod) {
   // Expect two strings not to be equal.
   EXPECT_THAT(result.x, testing::Eq(4.0f));
   EXPECT_THAT(result.y, testing::Eq(9.0f));
-  // EXPECT_STREQ("some", "value");
 }
 
-TEST(VectorLib, shouldAddToVectorXYComponentsAsArrayWithUseOfAddMethod) {
+TEST(VectorLibAddition, AddToVectorXYComponentsAsArrayWithUseOfAddMethod) {
 
   // Use uniform intialisation
   Vector leftOperand {2.0f, 5.0f};
@@ -67,5 +52,28 @@ TEST(VectorLib, shouldAddToVectorXYComponentsAsArrayWithUseOfAddMethod) {
   // Expect two strings not to be equal.
   EXPECT_THAT(result.x, testing::Eq(4.3f));
   EXPECT_THAT(result.y, testing::Eq(14.1f));
-  // EXPECT_STREQ("some", "value");
+}
+
+TEST(VectorLibAddition, AddScalarToVectorWithUseOfAddMethod) {
+  // Use uniform intialisation
+  Vector vector {2.0f, 5.0f};
+  float scalar = 3.2f;
+
+  Vector result = vector.add(scalar);
+
+  // Expect two strings not to be equal.
+  EXPECT_THAT(result.x, testing::Eq(5.2f));
+  EXPECT_THAT(result.y, testing::Eq(8.2f));
+}
+
+TEST(VectorLibAddition, AddScalarToVectorWithUseOfPlusSign) {
+  // Use uniform intialisation
+  Vector vector {2.0f, 5.0f};
+  float scalar = 3.2f;
+
+  Vector result = vector + scalar;
+
+  // Expect two strings not to be equal.
+  EXPECT_THAT(result.x, testing::FloatEq(5.2f));
+  EXPECT_THAT(result.y, testing::FloatEq(8.2f));
 }

@@ -30,11 +30,12 @@
     "testPresets": [
         {
             "name": "windows-test",
-            "description": "",
-            "displayName": "",
+            "description": "Default test preset",
+            "displayName": "Default test preset",
             "configurePreset": "windows-preset",
             "output": {
-                "verbosity": "verbose"
+                "shortProgress": true,
+                "outputOnFailure": true
             }
         }
     ]

@@ -1,0 +1,5 @@
+add to vector scalar: vector a + 5.0f
+substract from vector scalar: vector a - 5.0f
+process case when scalara is int: vector + 5
+vprocess case when scalara is int: vector - 5
+Initiliaze vector with x and y equal to 0 when no default constructor called
