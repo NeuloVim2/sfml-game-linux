@@ -2,3 +2,4 @@ include(GoogleTest)
 
 add_subdirectory(vector_test/vector_addition_test)
 add_subdirectory(vector_test/vector_substraction_test)
+add_subdirectory(vector_test/vector_multiplication_test)

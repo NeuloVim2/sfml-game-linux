@@ -34,6 +34,21 @@ Vector Vector::operator-(const float scalar) {
     return temp;
 };
 
+Vector Vector::operator*(const float scalar) {
+    Vector temp;
+    std::cout << "Result of float multiplication: " << 2.0f * 3.3f << std::endl;
+    std::cout << "==========================" 
+              << "Values before\n" 
+              << "temp.x: " << temp.x 
+              << ", temp.y: " << temp.y 
+              << ", scalar: " << scalar
+              << "==========================\n";
+    temp.x = x * scalar;
+    temp.y = y * scalar;
+    std::cout << "temp.x: " << temp.x << ", temp.y: " << temp.y << std::endl;
+    return temp;
+};
+
 Vector& Vector::add(const Vector& operand) {
     this->x += operand.x;
     this->y += operand.y;
