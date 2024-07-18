@@ -12,6 +12,10 @@ public:
     // Member initialisation of constructor
     Vector(float xArg, float yArg):x(xArg), y(yArg){};
 
+
+    bool operator==(const Vector& vector) const;
+    bool operator!=(const Vector& vector) const;
+
     // Vector operator=(const float* arr);
     Vector operator+(const Vector& operand);
     Vector operator+(const float scalar);
