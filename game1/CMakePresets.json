@@ -2,8 +2,8 @@
     "version": 8,
     "configurePresets": [
         {
-            "name": "linux-preset",
-            "displayName": "linux-preset",
+            "name": "linux-debug",
+            "displayName": "linux-debug",
             "description": "Using compilers: C = /usr/bin/gcc, CXX = /usr/bin/g++",
             "binaryDir": "${sourceDir}/build/${presetName}",
             "cacheVariables": {
@@ -14,8 +14,8 @@
             }
         },
         {
-            "name": "windows-preset",
-            "displayName": "windows-preset",
+            "name": "windows-debug",
+            "displayName": "windows-debug",
             "description": "Using compilers: C = C:\\msys64\\ucrt64\\bin\\gcc.exe, CXX = C:\\msys64\\ucrt64\\bin\\g++.exe",
             "generator": "MinGW Makefiles",
             "binaryDir": "${sourceDir}/build/${presetName}",
@@ -29,10 +29,20 @@
     ],
     "testPresets": [
         {
+            "name": "linux-test",
+            "description": "Test with ctest on linux",
+            "displayName": "linux-test",
+            "configurePreset": "linux-debug",
+            "output": {
+                "shortProgress": true,
+                "outputOnFailure": true
+            }
+        },
+        {
             "name": "windows-test",
-            "description": "Default test preset",
-            "displayName": "Default test preset",
-            "configurePreset": "windows-preset",
+            "description": "Test with ctest on windows",
+            "displayName": "windows-test",
+            "configurePreset": "windows-debug",
             "output": {
                 "shortProgress": true,
                 "outputOnFailure": true
