@@ -42,6 +42,10 @@ Vector Vector::operator*(const float scalar) {
     return temp;
 };
 
+Vector Vector::operator-() {
+  return Vector(-x, -y);
+};
+
 bool Vector::operator==(const Vector& vector) const {
     return x == vector.x && y == vector.y;
 };

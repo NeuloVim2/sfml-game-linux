@@ -23,6 +23,8 @@ public:
     Vector operator-(const float scalar);
     Vector operator*(const float scalar);
 
+    Vector operator-();
+
     Vector& add(const Vector& operand);
     Vector& add(const float scalar);
     Vector& add(const float x,  const float y);

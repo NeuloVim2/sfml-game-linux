@@ -5,7 +5,11 @@ process case when scalar is int:
 Initiliaze vector with x and y equal to 0 when no default constructor called
  after vector(), vectro.x = 0 and vector.y = 0
 
-Add negate operation for vector: -vector
+Add negate operation for vector: 
+  vector v = {x, y} and do -v => -v.x, -v.y 
+  vector v = {-x, y} and do -v => v.x, -v.y 
+  vector v = {x, -y} and do -v => -v.x, v.y 
+  vector v = {-x, -y} and do -v => v.x, v.y 
 
 Compare two vector for equalaty
  vector1 == vector2
