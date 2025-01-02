@@ -11,14 +11,18 @@ project(game1
     CXX
 )
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 message("Set BUILD_SHARED_LIBS to ${BUILD_SHARED_LIBS}")
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
-enable_testing()
+add_executable(game src/main.cpp)
 
-add_subdirectory(lib)
-add_subdirectory(src)
-add_subdirectory(test)
+add_subdirectory(extern/sfml)
+add_subdirectory(extern/imgui)
+target_link_libraries(game PRIVATE sfml-window 
+                                   sfml-graphics 
+                                   sfml-system 
+                                   sfml-audio
+                                   imgui)
