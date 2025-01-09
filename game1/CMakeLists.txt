@@ -19,6 +19,6 @@ option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
 enable_testing()
 
-add_subdirectory(lib)
+add_subdirectory(extern)
 add_subdirectory(src)
 add_subdirectory(test)
