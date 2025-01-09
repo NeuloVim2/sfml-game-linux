@@ -11,11 +11,16 @@
                 "CMAKE_C_COMPILER": "/usr/bin/gcc",
                 "CMAKE_CXX_COMPILER": "/usr/bin/g++",
                 "CMAKE_BUILD_TYPE": "Debug"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
             }
         },
         {
-            "name": "windows-debug",
-            "displayName": "windows-debug",
+            "name": "WinGcc",
+            "displayName": "Windows g++",
             "description": "Using compilers: C = C:\\msys64\\ucrt64\\bin\\gcc.exe, CXX = C:\\msys64\\ucrt64\\bin\\g++.exe",
             "generator": "MinGW Makefiles",
             "binaryDir": "${sourceDir}/build/${presetName}",
@@ -24,7 +29,40 @@
                 "CMAKE_C_COMPILER": "C:/msys64/ucrt64/bin/gcc.exe",
                 "CMAKE_CXX_COMPILER": "C:/msys64/ucrt64/bin/g++.exe",
                 "CMAKE_BUILD_TYPE": "Debug"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
             }
+        },
+        {
+            "name": "WinVisualStudio22",
+            "displayName": "Windows Visual Studio 22 configuration",
+            "description": "Configuration for Windows with generator for Visual Studio 22",
+            "generator": "Visual Studio 17 2022",
+            "toolset": "host=x64",
+            "architecture": "x64",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install/${presetName}",
+                "CMAKE_C_COMPILER": "cl.exe",
+                "CMAKE_CXX_COMPILER": "cl.exe"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
+        }
+
+    ],
+    "buildPresets": [
+        {
+            "name": "WinVisualStudio22Build",
+            "displayName": "Windows Visual Studio 22 build",
+            "configurePreset": "WinVisualStudio22",
+            "configuration": "Debug"
         }
     ],
     "testPresets": [
@@ -42,7 +80,7 @@
             "name": "windows-test",
             "description": "Test with ctest on windows",
             "displayName": "windows-test",
-            "configurePreset": "windows-debug",
+            "configurePreset": "WinVisualStudio22",
             "output": {
                 "shortProgress": true,
                 "outputOnFailure": true
