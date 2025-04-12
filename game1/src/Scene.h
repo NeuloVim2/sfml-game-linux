@@ -1,4 +1,6 @@
 #pragma once
+#ifndef SCENE_H
+#define SCENE_H
 
 #include <unordered_map>
 #include <cstdint>
@@ -15,14 +17,15 @@ public:
 		level_one,
 	};
 
-
 private:
 	Type m_sceneType{};
 
 	ComponentManager cm;
 
 public:
-	Scene(Type sceneType);
+	Scene(Type sceneType) 
+		: m_sceneType { sceneType }
+	{};
 
 	Scene() = default;
 	~Scene() = default;
@@ -32,3 +35,5 @@ public:
 	void run();
 
 };
+
+#endif
