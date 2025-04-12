@@ -5,7 +5,12 @@
 #include <imgui-SFML.h>
 #include <imgui.h>
 
+#include "Scene.h"
+
 int main() {
+    Scene scene{ Scene::main_menu };
+    //std::shared_ptr<Scene> scene = std::make_shared<Scene>(Scene::main_menu);
+
     sf::RenderWindow window(sf::VideoMode(1280, 720), "ImGui + SFML = <3");
     window.setFramerateLimit(60);
     ImGui::SFML::Init(window);

@@ -4,10 +4,10 @@
 
 class Vector {
 public:
-    float x;
-    float y;
+    float x{};
+    float y{};
     
-    Vector(){};
+    Vector() = default;
 
     // Member initialisation of constructor
     Vector(float xArg, float yArg):x(xArg), y(yArg){};
