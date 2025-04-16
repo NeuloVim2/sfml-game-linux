@@ -13,7 +13,7 @@ private:
 	const int		  WIDTH;
 	const int		  HEIGHT;
 	const std::string TITLE;
-	sf::RenderWindow& window;
+	std::shared_ptr<sf::RenderWindow> window = std::make_shared<sf::RenderWindow>();
 
 
 public:
@@ -22,7 +22,7 @@ public:
 	void run();
 
 	Game() = default;
-	~Game() = default;
+	~Game();
 };
 
 #endif

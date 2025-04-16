@@ -23,7 +23,7 @@ message("Include directories ${INCLUDE_DIRECTORIES}")
 
 add_executable(game ${Sources})
 target_link_libraries(game 
-                      PRIVATE 
-                      ImGui-SFML::ImGui-SFML
-                      vector
+                      PUBLIC
+                        ImGui-SFML::ImGui-SFML
+                        vector
 )

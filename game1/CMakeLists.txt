@@ -22,3 +22,10 @@ enable_testing()
 add_subdirectory(extern)
 add_subdirectory(src)
 add_subdirectory(test)
+
+add_custom_target(copy_resources ALL
+            COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${PROJECT_SOURCE_DIR}/resources
+            ${PROJECT_BINARY_DIR}/resources
+            COMMENT "Copying resources into binary directory")
+add_dependencies(game copy_resources)
