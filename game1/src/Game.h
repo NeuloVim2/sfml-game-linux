@@ -1,6 +1,6 @@
+#pragma once
 #ifndef GAME_H
 #define GAME_H
-#pragma once
 
 #include <string>
 #include <memory>

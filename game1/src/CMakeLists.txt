@@ -8,6 +8,8 @@ set(Sources
     ComponentManager.h
     Game.h
     Game.cpp
+    Entity.cpp
+    Entity.h
 )
 
 add_library(vector vector.cpp)
