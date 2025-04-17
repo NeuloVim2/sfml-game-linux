@@ -4,15 +4,14 @@
 
 #include <cstdint>
 #include <string>
-#include <tuple>
 
 #include "components.hpp"
-
+#include "typedefs.h"
 
 class Entity 
 {
 private:
-	std::tuple<Position, Velocity>	m_components {};
+	ComponentTuple	m_components {};
 	bool			m_alive { true };
 	std::string		m_tag { "default" };
 	uint8_t			m_id { 0 };
