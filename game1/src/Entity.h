@@ -17,24 +17,27 @@ private:
 	uint8_t			m_id { 0 };
 
 public:
-	Enitty() {}
+	Entity() {};
 
-					template<typename T>
-	void			add<T>();
+	template<typename T>
+	void add();
 
-					template<typename T>
-	T&				get<T>();
+	template<typename T>
+	T& get();
 
-					template<typename T>
-	bool			has<T>();
+	template<typename T>
+	const T& get() const;
 
-					template<typename T>
-	void			remove<T>();
+	template<typename T>
+	bool has();
 
-	bool			isAlive() const;
-	uint8_t			id() const;
-	void			destroy();
-	const			std::string& tag() const;
+	template<typename T>
+	void remove();
+
+	bool isAlive() const;
+	uint8_t id() const;
+	void destroy();
+	const std::string& tag() const;
 };
 
 #endif
