@@ -13,9 +13,9 @@ class Entity
 {
 private:
 	std::tuple<Position, Velocity>	m_components {};
-	bool			m_alive {};
-	std::string		m_tag {};
-	uint8_t			m_id {};
+	bool			m_alive { true };
+	std::string		m_tag { "default" };
+	uint8_t			m_id { 0 };
 
 public:
 	Enitty() {}
