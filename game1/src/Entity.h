@@ -19,8 +19,8 @@ private:
 public:
 	Entity() {};
 
-	template<typename T>
-	void add();
+	template<typename T, typename... TArgs>
+	T& add(TArgs&&... mArgs);
 
 	template<typename T>
 	T& get();
