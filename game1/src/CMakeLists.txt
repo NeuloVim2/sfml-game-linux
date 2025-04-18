@@ -4,8 +4,6 @@ set(Sources
     Scene.h 
     Scene.cpp 
     typedefs.h 
-    ComponentManager.cpp 
-    ComponentManager.h
     Game.h
     Game.cpp
     Entity.cpp

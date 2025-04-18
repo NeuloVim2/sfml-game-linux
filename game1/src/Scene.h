@@ -8,7 +8,6 @@
 
 #include "./typedefs.h"
 #include "./components.hpp"
-#include "./ComponentManager.h"
 
 
 class Scene {
@@ -21,8 +20,6 @@ public:
 private:
 	Type m_sceneType{};
 	std::shared_ptr<sf::RenderWindow> m_window{};
-
-	ComponentManager cm{};
 
 public:
 	Scene(Type sceneType, std::shared_ptr<sf::RenderWindow> window = nullptr)
