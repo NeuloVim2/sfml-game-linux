@@ -1,6 +1,6 @@
 set(Sources 
     main.cpp
-    components.hpp 
+    Components.hpp 
     Scene.h 
     Scene.cpp 
     typedefs.h 

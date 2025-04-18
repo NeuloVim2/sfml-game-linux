@@ -7,7 +7,7 @@
 #include <iostream>
 
 #include "./typedefs.h"
-#include "./components.hpp"
+#include "./Components.hpp"
 
 
 class Scene {
