@@ -2,18 +2,28 @@
 
 class Component
 {
-private:
-	bool exists = false;
 public:
+	bool exists = false;
 	Component() {};
 };
 
-struct Position{
+class CPosition: Component {
+public:
 	float x {};
 	float y {};
+	
+	CPosition() {};
+	CPosition(float x, float y): x{x}, y{y}
+	{};
+
 };
 
-struct Velocity {
+class CVelocity: Component {
+public:
 	float dx {};
 	float dy {};
+
+	CVelocity() {};
+	CVelocity(float dx, float dy) :dx{ dx }, dy { dy }
+	{};
 };
