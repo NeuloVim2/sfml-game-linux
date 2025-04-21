@@ -1,5 +1,5 @@
 #pragma once
-#ifndef ENTIITY_H
+#ifndef ENTITY_H
 #define ENTITY_H
 
 #include <cstdint>
