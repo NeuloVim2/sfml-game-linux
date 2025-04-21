@@ -7,7 +7,7 @@ public:
 	Component() {};
 };
 
-class CPosition: Component {
+class CPosition: public Component {
 public:
 	float x {};
 	float y {};
@@ -18,7 +18,7 @@ public:
 
 };
 
-class CVelocity: Component {
+class CVelocity: public Component {
 public:
 	float dx {};
 	float dy {};
