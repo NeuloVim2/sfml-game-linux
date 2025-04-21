@@ -1,21 +1,21 @@
 #include "Entity.h"
 
-template<typename T>
-T& Entity::get()
+bool Entity::isAlive() const
 {
-	return std::get<T>(m_components);
+	return m_alive;
 }
 
-template<typename T>
-const T& Entity::get() const
+uint8_t Entity::id() const
 {
-	return std::get<T>(m_components);
+	return m_id;
 }
 
-template<typename T, typename... TArgs>
-T& Entity::add(TArgs&&... mArgs)
+void Entity::destroy()
 {
-	auto& component = get<T>();
-	component = T(std::forward<TArgs>(mArgs)...);
-	return component;
-};
+	m_alive = false;
+}
+
+const std::string& Entity::tag() const
+{
+	return m_tag;
+}

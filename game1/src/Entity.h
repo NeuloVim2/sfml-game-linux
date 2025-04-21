@@ -19,20 +19,38 @@ private:
 public:
 	Entity() {};
 
-	template<typename T, typename... TArgs>
-	T& add(TArgs&&... mArgs);
+	template<typename T, typename ...TArgs>
+	T& add(TArgs && ...mArgs)
+	{
+		auto& component = get<T>();
+		component = T(std::forward<TArgs>(mArgs)...);
+		component.exists = false;
+		return component;
+	}
 
 	template<typename T>
-	T& get();
+	T& get()
+	{
+		return std::get<T>(m_components);
+	}
 
 	template<typename T>
-	const T& get() const;
+	const T& get() const
+	{
+		return std::get<T>(m_components);
+	}
 
 	template<typename T>
-	bool has();
+	bool has()
+	{
+		return get<T>().exists;
+	}
 
 	template<typename T>
-	void remove();
+	void remove()
+	{
+		get<T>() = T();
+	}
 
 	bool isAlive() const;
 	uint8_t id() const;
