@@ -5,7 +5,7 @@
 #include <cstdint>
 #include <string>
 
-#include "components.hpp"
+#include "Components.hpp"
 #include "typedefs.h"
 
 class Entity 
