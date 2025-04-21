@@ -24,7 +24,7 @@ public:
 	{
 		auto& component = get<T>();
 		component = T(std::forward<TArgs>(mArgs)...);
-		component.exists = false;
+		component.exists = true;
 		return component;
 	}
 

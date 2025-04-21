@@ -8,7 +8,7 @@ set(Sources
     Game.cpp
     Entity.cpp
     Entity.h
-)
+ "EntityManager.h")
 
 add_library(vector vector.cpp)
 # list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/include/vector")

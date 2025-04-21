@@ -1,5 +1,6 @@
 #include <iostream>
 #include <filesystem>
+#include <vector>
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Font.hpp>
@@ -7,11 +8,13 @@
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
-
+ 
 #include <imgui-SFML.h>
 #include <imgui.h>
 
 #include "Scene.h"
+#include "Entity.h"
+#include "Components.hpp"
 
 void Scene::setUp()
 {
@@ -19,6 +22,17 @@ void Scene::setUp()
 
 void Scene::run()
 {
+    std::vector<Entity> entityes;
+
+    Entity ent1;
+    ent1.add<CPosition>(1.0f, 30.0f);
+    entityes.push_back(ent1);
+    for (auto& e : entityes)
+    {
+        if(e.has<CPosition>())
+            std::cout << "For enity " << e.tag() << " -> Position x: " << e.get<CPosition>().x << std::endl;
+    };
+
     std::cout << "Scene::run() : " << "m_window (" << m_window.get() << ")" << std::endl;
     sf::Clock deltaClock;
 
