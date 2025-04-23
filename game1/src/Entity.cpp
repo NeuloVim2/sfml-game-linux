@@ -1,5 +1,9 @@
 #include "Entity.h"
 
+Entity::Entity(const std::string& tag, uint8_t id) : m_tag{tag}, m_id{id}
+{
+}
+
 bool Entity::isAlive() const
 {
 	return m_alive;
