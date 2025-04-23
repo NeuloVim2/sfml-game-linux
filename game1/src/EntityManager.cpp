@@ -12,13 +12,19 @@ void EntityManager::update()
 
 	m_toAdd.clear();
 
-	m_entities.erase(std::remove_if(m_entities.begin(), m_entities.end(), [](auto e) { return !e->isAlive(); }));
+	m_entities.erase(
+		std::remove_if(m_entities.begin(), m_entities.end(), 
+			[](auto e) { return !e->isAlive(); }
+		)
+	, m_entities.end());
+
 	std::for_each(m_enityMap.begin(), m_enityMap.end(), 
 		[](auto mE) { 
 			mE.second.erase(std::remove_if(mE.second.begin(), mE.second.end(),
 				[](auto e) { 
 					return !e->isAlive();
-				}));
+				})
+			, mE.second.end());
 		});
 
 }
