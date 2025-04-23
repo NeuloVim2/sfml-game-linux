@@ -1,6 +1,6 @@
 #include "Entity.h"
 
-Entity::Entity(const std::string& tag, uint8_t id) : m_tag{tag}, m_id{id}
+Entity::Entity(const std::string& tag, uint32_t id) : m_tag{tag}, m_id{id}
 {
 }
 
@@ -9,7 +9,7 @@ bool Entity::isAlive() const
 	return m_alive;
 }
 
-uint8_t Entity::id() const
+uint32_t Entity::id() const
 {
 	return m_id;
 }

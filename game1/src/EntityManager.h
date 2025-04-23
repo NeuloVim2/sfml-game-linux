@@ -16,7 +16,7 @@ private:
 	EntityVec m_entities;
 	EntityVec m_toAdd;
 	EntityMap m_enityMap;
-	uint8_t m_totalentities = 0;
+	uint32_t m_totalentities = 0;
 public:
 	EntityManager() {};
 	void update();

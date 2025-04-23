@@ -14,11 +14,11 @@ private:
 	ComponentTuple	m_components;
 	bool			m_alive { true };
 	std::string		m_tag { "default" };
-	uint8_t			m_id { 0 };
+	uint32_t	    m_id { 0 };
 
 public:
 	Entity() = default;
-	Entity(const std::string& tag, uint8_t id);
+	Entity(const std::string& tag, uint32_t id);
 
 	template<typename T, typename ...TArgs>
 	T& add(TArgs && ...mArgs)
@@ -54,7 +54,7 @@ public:
 	}
 
 	bool isAlive() const;
-	uint8_t id() const;
+	uint32_t id() const;
 	void destroy();
 	const std::string& tag() const;
 };

@@ -24,8 +24,18 @@ void Scene::setUp()
 void Scene::run()
 {
     EntityManager m_entities;
+
+    auto player = m_entities.addEntity("player");
+    player->add<CPosition>(5.0f, 3.0f);
+
     auto e = m_entities.addEntity("test");
     e->add<CPosition>(1.0f, 30.0f);
+
+    m_entities.update();
+
+    for (auto e : m_entities.getEntities()) {
+        std::cout << e->id() << " : " << e->tag() << std::endl;
+    }
 
     std::cout << "Scene::run() : " << "m_window (" << m_window.get() << ")" << std::endl;
     sf::Clock deltaClock;
