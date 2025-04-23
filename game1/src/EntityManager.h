@@ -7,6 +7,9 @@
 #include "Entity.h"
 #include "typedefs.h"
 
+using EntityVec = std::vector<std::shared_ptr<Entity>>;
+using EntityMap = std::unordered_map<std::string, EntityVec>;
+
 class EntityManager
 { 
 private:
