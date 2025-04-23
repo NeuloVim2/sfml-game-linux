@@ -11,13 +11,14 @@
 class Entity 
 {
 private:
-	ComponentTuple	m_components {};
+	ComponentTuple	m_components;
 	bool			m_alive { true };
 	std::string		m_tag { "default" };
 	uint8_t			m_id { 0 };
 
 public:
-	Entity() {};
+	Entity() = default;
+	Entity(const std::string& tag, uint8_t id);
 
 	template<typename T, typename ...TArgs>
 	T& add(TArgs && ...mArgs)
