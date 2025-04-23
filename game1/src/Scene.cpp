@@ -14,6 +14,7 @@
 
 #include "Scene.h"
 #include "Entity.h"
+#include "EntityManager.h"
 #include "Components.hpp"
 
 void Scene::setUp()
@@ -22,16 +23,9 @@ void Scene::setUp()
 
 void Scene::run()
 {
-    std::vector<Entity> entityes;
-
-    Entity ent1;
-    ent1.add<CPosition>(1.0f, 30.0f);
-    entityes.push_back(ent1);
-    for (auto& e : entityes)
-    {
-        if(e.has<CPosition>())
-            std::cout << "For enity " << e.tag() << " -> Position x: " << e.get<CPosition>().x << std::endl;
-    };
+    EntityManager m_entities;
+    auto e = m_entities.addEntity("test");
+    e->add<CPosition>(1.0f, 30.0f);
 
     std::cout << "Scene::run() : " << "m_window (" << m_window.get() << ")" << std::endl;
     sf::Clock deltaClock;
