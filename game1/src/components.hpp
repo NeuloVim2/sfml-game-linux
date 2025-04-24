@@ -1,5 +1,7 @@
 #pragma once
 
+#include "vector.h"
+
 class Component
 {
 public:
@@ -7,23 +9,17 @@ public:
 	Component() {};
 };
 
-class CPosition: public Component {
+class CTransform: public Component {
 public:
-	float x {};
-	float y {};
+
+	Vector pos{};
+	Vector vel{};
+	Vector scale{};
+	float angle{};
 	
-	CPosition() {};
-	CPosition(float x, float y): x{x}, y{y}
+	CTransform() {};
+	CTransform(Vector pos, Vector vel, Vector scale, float angle)
+		: pos{pos}, vel{vel}, scale{scale}, angle{angle}
 	{};
 
-};
-
-class CVelocity: public Component {
-public:
-	float dx {};
-	float dy {};
-
-	CVelocity() {};
-	CVelocity(float dx, float dy) :dx{ dx }, dy { dy }
-	{};
 };

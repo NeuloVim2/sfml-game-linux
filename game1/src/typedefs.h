@@ -10,6 +10,6 @@ const int HEIGHT = 700;
 const int WIDTH = 1280;
 
 using ComponentTuple = std::tuple<
-	CPosition,
+	CTransform,
 	CVelocity
 >;
