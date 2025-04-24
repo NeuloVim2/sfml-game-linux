@@ -8,6 +8,8 @@
 #include "Components.hpp"
 #include "typedefs.h"
 
+class EntityManger;
+
 class Entity 
 {
 private:
@@ -16,9 +18,9 @@ private:
 	std::string		m_tag { "default" };
 	uint32_t	    m_id { 0 };
 
-public:
-	Entity() = default;
 	Entity(const std::string& tag, uint32_t id);
+
+public:
 
 	template<typename T, typename ...TArgs>
 	T& add(TArgs && ...mArgs)
@@ -57,6 +59,8 @@ public:
 	uint32_t id() const;
 	void destroy();
 	const std::string& tag() const;
+
+	friend class EntityManager;
 };
 
 #endif

@@ -31,7 +31,7 @@ void EntityManager::update()
 
 std::shared_ptr<Entity> EntityManager::addEntity(const std::string& tag)
 {
-	auto ent = std::make_shared<Entity>(tag, m_totalentities++);
+	auto ent = std::shared_ptr<Entity>(new Entity(tag, m_totalentities++));
 	m_toAdd.push_back(ent);
 	return ent;
 }
