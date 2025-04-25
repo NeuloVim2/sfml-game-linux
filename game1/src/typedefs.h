@@ -11,5 +11,8 @@ const int WIDTH = 1280;
 
 using ComponentTuple = std::tuple<
 	CTransform,
-	CVelocity
+	CCollision,
+	CScore,
+	CShape,
+	CInput
 >;
