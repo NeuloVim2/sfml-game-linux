@@ -14,6 +14,10 @@ Game::Game(int height, int width, std::string& title)
 	, TITLE{ title }
 {
 	std::cout << "Game constructor is called" << std::endl;
+}
+
+void Game::init()
+{
 	window->create(sf::VideoMode(sf::Vector2u(WIDTH, HEIGHT)), TITLE);
 
 	window->setFramerateLimit(60);
@@ -21,7 +25,7 @@ Game::Game(int height, int width, std::string& title)
 
 	ImGui::GetStyle().ScaleAllSizes(2.0f);
 	ImGui::GetIO().FontGlobalScale = 2.0f;
-};
+}
 
 void Game::run()
 {

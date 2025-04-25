@@ -21,6 +21,7 @@ private:
 public:
 	Game(int height, int width, std::string& title);
 
+	void init();
 	void run();
 
 	Game() = default;
