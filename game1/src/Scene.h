@@ -8,6 +8,7 @@
 
 #include "./typedefs.h"
 #include "./Components.hpp"
+#include "EntityManager.h"
 
 
 class Scene {
@@ -20,11 +21,13 @@ public:
 private:
 	Type m_sceneType{};
 	std::shared_ptr<sf::RenderWindow> m_window{};
+	std::shared_ptr<EntityManager> m_entities{};
 
 public:
-	Scene(Type sceneType, std::shared_ptr<sf::RenderWindow> window = nullptr)
+	Scene(Type sceneType, std::shared_ptr<sf::RenderWindow> window = nullptr, std::shared_ptr<EntityManager> eM = nullptr)
 		: m_sceneType{ sceneType }
 		, m_window { window }
+		, m_entities { eM}
 	{
 		std::cout << "Scene constructor is called" << std::endl;
 

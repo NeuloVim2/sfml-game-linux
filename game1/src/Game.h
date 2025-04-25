@@ -7,6 +7,8 @@
 
 #include <SFML/Graphics/RenderWindow.hpp> 
 
+#include "EntityManager.h"
+
 class Game 
 {
 private:
@@ -14,7 +16,7 @@ private:
 	const int		  HEIGHT;
 	const std::string TITLE;
 	std::shared_ptr<sf::RenderWindow> window = std::make_shared<sf::RenderWindow>();
-
+	std::shared_ptr <EntityManager> m_entities = std::make_shared<EntityManager>();
 
 public:
 	Game(int height, int width, std::string& title);
