@@ -6,8 +6,8 @@
 #include <cstdint>
 #include <iostream>
 
-#include "./typedefs.h"
-#include "./Components.hpp"
+#include "typedefs.h"
+#include "Components.hpp"
 #include "EntityManager.h"
 
 
@@ -22,6 +22,15 @@ private:
 	Type m_sceneType{};
 	std::shared_ptr<sf::RenderWindow> m_window{};
 	std::shared_ptr<EntityManager> m_entities{};
+
+	bool m_paused{ false };
+	bool m_running { false };
+
+	void sMovement();
+	void sUserInput();
+	void sEnemySpawner();
+	void sCollision();
+	void sRender();
 
 public:
 	Scene(Type sceneType, std::shared_ptr<sf::RenderWindow> window = nullptr, std::shared_ptr<EntityManager> eM = nullptr)

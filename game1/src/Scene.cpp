@@ -26,10 +26,10 @@ void Scene::run()
     EntityManager m_entities;
 
     auto player = m_entities.addEntity("player");
-    player->add<CTransform>(Vector {3.3f, 4.5f}, Vector {11.3f, 3.5f}, Vector {2.0f, 2.0f}, 30.0f);
+    player->add<CTransform>(Vector2f {3.3f, 4.5f}, Vector2f {11.3f, 3.5f}, Vector2f {2.0f, 2.0f}, 30.0f);
 
     auto e = m_entities.addEntity("test");
-    e->add<CTransform>(Vector {2.3f, 10.5f}, Vector {11.3f, 3.5f}, Vector {2.0f, 2.0f}, 30.0f);
+    e->add<CTransform>(Vector2f {2.3f, 10.5f}, Vector2f {11.3f, 3.5f}, Vector2f {2.0f, 2.0f}, 30.0f);
 
     m_entities.update();
 

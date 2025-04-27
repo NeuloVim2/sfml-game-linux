@@ -2,15 +2,15 @@
 #include<gmock/gmock.h>
 #include<iostream>
 
-#include "vector.h"
+#include "Vector2f.h"
 
 TEST(VectorLibMultiplication, MultiplyVectorByScalar) {
 
   // Use uniform intialisation
-  Vector vector {1.0f, 2.4f};
+  Vector2f vector {1.0f, 2.4f};
   float scalar = 3.3f;
 
-  Vector result = vector * scalar;
+  Vector2f result = vector * scalar;
 
   // Expect two strings not to be equal.
   EXPECT_THAT(result.x, testing::FloatEq(3.3f));

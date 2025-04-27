@@ -1,3 +1,7 @@
+!!!!!!!!!!!
+v.length()
+v.normilize()
+
 process case when scalar is int: 
  vector + 5
  vector - 5

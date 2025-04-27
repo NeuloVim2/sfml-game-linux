@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics/CircleShape.hpp>
 
-#include "vector.h"
+#include "Vector2f.h"
 
 class Component
 {
@@ -14,13 +14,13 @@ public:
 class CTransform: public Component {
 public:
 
-	Vector pos{};
-	Vector vel{};
-	Vector scale{};
+	Vector2f pos{};
+	Vector2f vel{};
+	Vector2f scale{};
 	float angle{};
 	
 	CTransform() {};
-	CTransform(Vector pos, Vector vel, Vector scale, float angle)
+	CTransform(Vector2f pos, Vector2f vel, Vector2f scale, float angle)
 		: pos{pos}, vel{vel}, scale{scale}, angle{angle}
 	{};
 

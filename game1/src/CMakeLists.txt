@@ -11,7 +11,7 @@ set(Sources
     EntityManager.h
     EntityManager.cpp)
 
-add_library(vector vector.cpp)
+add_library(vector Vector2f.cpp)
 # list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/include/vector")
 
 target_include_directories(vector
