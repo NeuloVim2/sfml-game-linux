@@ -37,9 +37,9 @@
             }
         },
         {
-            "name": "WinVisualStudio22",
-            "displayName": "Windows Visual Studio 22 configuration",
-            "description": "Configuration for Windows with generator for Visual Studio 22",
+            "name": "WinVisualStudio22 debug",
+            "displayName": "Windows Visual Studio 22 configuration debug",
+            "description": "Configuration for Windows with generator for Visual Studio 22 in debug",
             "generator": "Visual Studio 17 2022",
             "toolset": "host=x64",
             "architecture": "x64",
@@ -59,9 +59,9 @@
     ],
     "buildPresets": [
         {
-            "name": "WinVisualStudio22Build",
-            "displayName": "Windows Visual Studio 22 build",
-            "configurePreset": "WinVisualStudio22",
+            "name": "WinVisualStudio22Build debug",
+            "displayName": "Windows Visual Studio 22 debug build",
+            "configurePreset": "WinVisualStudio22 debug",
             "configuration": "Debug"
         }
     ],
@@ -80,7 +80,7 @@
             "name": "windows-test",
             "description": "Test with ctest on windows",
             "displayName": "windows-test",
-            "configurePreset": "WinVisualStudio22",
+            "configurePreset": "WinVisualStudio22 debug",
             "output": {
                 "shortProgress": true,
                 "outputOnFailure": true
