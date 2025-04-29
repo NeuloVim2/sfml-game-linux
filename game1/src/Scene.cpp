@@ -55,7 +55,7 @@ void Scene::run()
 
     std::cout << "Executable absolute path is " << std::filesystem::current_path() << std::endl;
 
-    if (!font.openFromFile("../../resources/fonts/tech.ttf")) 
+    if (!font.openFromFile("resources/fonts/tech.ttf")) 
     {
         std::cerr << "Could not load font!\n";
         exit(-1);
