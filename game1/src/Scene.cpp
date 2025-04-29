@@ -21,10 +21,14 @@ void Scene::setUp()
 {
 }
 
+void Scene::spawnPlayer() 
+{
+
+
+}
+
 void Scene::run()
 {
-    EntityManager m_entities;
-
     auto player = m_entities.addEntity("player");
     player->add<CTransform>(Vector2f {3.3f, 4.5f}, Vector2f {11.3f, 3.5f}, Vector2f {2.0f, 2.0f}, 30.0f);
 
@@ -37,7 +41,7 @@ void Scene::run()
         std::cout << e->id() << " : " << e->tag() << std::endl;
     }
 
-    std::cout << "Scene::run() : " << "m_window (" << m_window.get() << ")" << std::endl;
+    std::cout << "Scene::run() : " << "m_window (" << &m_window << ")" << std::endl;
     sf::Clock deltaClock;
 
     float c[3] = {1.0f, 2.0f, 0.0f};
@@ -72,16 +76,16 @@ void Scene::run()
 	circle.setFillColor(sf::Color(std::uint8_t(c[0] * 255), std::uint8_t(c[1] * 255), std::uint8_t(c[2] * 255)));
     circle.setPosition(sf::Vector2f(10.0f, 10.0f));
 
-    while (m_window->isOpen()) {
-        while (const std::optional event = m_window->pollEvent()) {
-            ImGui::SFML::ProcessEvent(*m_window, *event);
+    while (m_window.isOpen()) {
+        while (const std::optional event = m_window.pollEvent()) {
+            ImGui::SFML::ProcessEvent(m_window, *event);
 
             if (event->is<sf::Event::Closed>()) {
-                m_window->close();
+                m_window.close();
             }
         }
 
-        ImGui::SFML::Update(*m_window, deltaClock.restart());
+        ImGui::SFML::Update(m_window, deltaClock.restart());
 
         ImGui::Begin("Window title");
         ImGui::Text("Window text!");
@@ -100,7 +104,7 @@ void Scene::run()
 
         ImGui::End();
 
-        m_window->clear();
+        m_window.clear();
 
         circle.setPointCount(pointCount);
         circle.setRadius(radius);
@@ -108,12 +112,12 @@ void Scene::run()
         circle.setFillColor(sf::Color(std::uint8_t(c[0] * 255), std::uint8_t(c[1] * 255), std::uint8_t(c[2] * 255)));
 
         if(drawCircle)
-            m_window->draw(circle);
+            m_window.draw(circle);
 
         if(drawText)
-            m_window->draw(text);
+            m_window.draw(text);
         
-        ImGui::SFML::Render(*m_window);
-        m_window->display();
+        ImGui::SFML::Render(m_window);
+        m_window.display();
     }
 };

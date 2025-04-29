@@ -19,15 +19,15 @@ Game::Game(int height, int width, std::string& title)
 void Game::init()
 {
 	m_config.parse("config.txt");
-	window->create(
+	m_window.create(
 		sf::VideoMode(sf::Vector2u(m_config.window().width, m_config.window().height))
 		, TITLE
 		, sf::Style::None
 		, m_config.window().fullScreen ? sf::State::Fullscreen : sf::State::Windowed
 	);
 
-	window->setFramerateLimit(m_config.window().frameLimit);
-	ImGui::SFML::Init(*window);
+	m_window.setFramerateLimit(m_config.window().frameLimit);
+	ImGui::SFML::Init(m_window);
 
 	ImGui::GetStyle().ScaleAllSizes(2.0f);
 	ImGui::GetIO().FontGlobalScale = 2.0f;
@@ -35,7 +35,7 @@ void Game::init()
 
 void Game::run()
 {
-    std::unique_ptr<Scene> scene = std::make_unique<Scene>(Scene::main_menu, window);
+    std::unique_ptr<Scene> scene = std::make_unique<Scene>(Scene::main_menu, m_window, m_entities);
 
     scene->run();
 

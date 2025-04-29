@@ -20,11 +20,15 @@ public:
 
 private:
 	Type m_sceneType{};
-	std::shared_ptr<sf::RenderWindow> m_window{};
-	std::shared_ptr<EntityManager> m_entities{};
+	sf::RenderWindow& m_window;
+	EntityManager& m_entities;
 
 	bool m_paused{ false };
 	bool m_running { false };
+
+	void spawnPlayer();
+	void spawnEnemy();
+	void spawnBullet();
 
 	void sMovement();
 	void sUserInput();
@@ -33,15 +37,15 @@ private:
 	void sRender();
 
 public:
-	Scene(Type sceneType, std::shared_ptr<sf::RenderWindow> window = nullptr, std::shared_ptr<EntityManager> eM = nullptr)
+	Scene(Type sceneType, sf::RenderWindow& window, EntityManager& eM)
 		: m_sceneType{ sceneType }
 		, m_window { window }
-		, m_entities { eM}
+		, m_entities { eM }
 	{
 		std::cout << "Scene constructor is called" << std::endl;
 
-		std::cout << "window address " << window.get() << std::endl;
-		std::cout << "m_window address " << m_window.get() << std::endl;
+		std::cout << "window address " << &window << std::endl;
+		std::cout << "m_window address " << &m_window << std::endl;
 	};
 
 	Scene() = default;
