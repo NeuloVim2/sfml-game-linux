@@ -9,7 +9,9 @@ set(Sources
     Entity.cpp
     Entity.h
     EntityManager.h
-    EntityManager.cpp)
+    EntityManager.cpp
+    ConfigParser.h
+    ConfigParser.cpp)
 
 add_library(vector Vector2f.cpp)
 # list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/include/vector")
