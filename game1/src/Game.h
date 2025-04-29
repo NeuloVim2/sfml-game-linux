@@ -8,6 +8,7 @@
 #include <SFML/Graphics/RenderWindow.hpp> 
 
 #include "EntityManager.h"
+#include "ConfigParser.h"
 
 class Game 
 {
@@ -17,6 +18,8 @@ private:
 	const std::string TITLE;
 	std::shared_ptr<sf::RenderWindow> window = std::make_shared<sf::RenderWindow>();
 	std::shared_ptr <EntityManager> m_entities = std::make_shared<EntityManager>();
+
+	ConfigParser m_config {};
 
 public:
 	Game(int height, int width, std::string& title);

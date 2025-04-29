@@ -18,9 +18,15 @@ Game::Game(int height, int width, std::string& title)
 
 void Game::init()
 {
-	window->create(sf::VideoMode(sf::Vector2u(WIDTH, HEIGHT)), TITLE);
+	m_config.parse("config.txt");
+	window->create(
+		sf::VideoMode(sf::Vector2u(m_config.window().width, m_config.window().height))
+		, TITLE
+		, sf::Style::None
+		, m_config.window().fullScreen ? sf::State::Fullscreen : sf::State::Windowed
+	);
 
-	window->setFramerateLimit(60);
+	window->setFramerateLimit(m_config.window().frameLimit);
 	ImGui::SFML::Init(*window);
 
 	ImGui::GetStyle().ScaleAllSizes(2.0f);
