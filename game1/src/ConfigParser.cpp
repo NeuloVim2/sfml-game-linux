@@ -59,9 +59,6 @@ void ConfigParser::parse(const std::string& path)
 			m_configFile >> m_enemy.shapeConfig.collisionRadius;
 			m_configFile >> m_enemy.minSpeed;
 			m_configFile >> m_enemy.maxSpeed;
-			m_configFile >> m_enemy.shapeConfig.fillColor[0];
-			m_configFile >> m_enemy.shapeConfig.fillColor[1];
-			m_configFile >> m_enemy.shapeConfig.fillColor[2];
 			m_configFile >> m_enemy.shapeConfig.outlineColor[0];
 			m_configFile >> m_enemy.shapeConfig.outlineColor[1];
 			m_configFile >> m_enemy.shapeConfig.outlineColor[2];

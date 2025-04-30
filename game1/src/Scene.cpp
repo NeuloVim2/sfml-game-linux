@@ -93,7 +93,7 @@ void Scene::sRender()
 
 void Scene::run()
 {
-    auto player = m_entities.addEntity("player");
+  /*  auto player = m_entities.addEntity("player1");
     player->add<CTransform>(Vector2f {3.3f, 4.5f}, Vector2f {11.3f, 3.5f}, Vector2f {2.0f, 2.0f}, 30.0f);
 
     auto e = m_entities.addEntity("test");
@@ -117,39 +117,42 @@ void Scene::run()
     char displayString[255]  = "Sample Text";
 
     bool drawCircle = true;
-    bool drawText = true;
+    bool drawText = true;*/
 
     sf::Font font;
 
     std::cout << "Executable absolute path is " << std::filesystem::current_path() << std::endl;
 
-    if (!font.openFromFile("resources/fonts/tech.ttf")) 
+    if (!font.openFromFile(m_config.font().fontFile)) 
     {
         std::cerr << "Could not load font!\n";
         exit(-1);
     };
 
-    sf::Text text(font, "Sample Text", 24);
+    sf::Text text(font, "Sample Text", m_config.font().fontSize);
 
-    text.setFillColor(sf::Color::White);
+    text.setFillColor(sf::Color(m_config.font().rgb[0], m_config.font().rgb[1], m_config.font().rgb[2]));
 
     text.setPosition(sf::Vector2f(0, HEIGHT - (float) text.getCharacterSize()));
 
-	sf::CircleShape circle(radius, pointCount);
+	//sf::CircleShape circle(radius, pointCount);
+
+	//circle.setFillColor(sf::Color(std::uint8_t(c[0] * 255), std::uint8_t(c[1] * 255), std::uint8_t(c[2] * 255)));
+ //   circle.setPosition(sf::Vector2f(10.0f, 10.0f));
 
     spawnPlayer();
     spawnEnemy();
 
     while (m_window.isOpen()) {
         while (const std::optional event = m_window.pollEvent()) {
-            ImGui::SFML::ProcessEvent(m_window, *event);
+            //ImGui::SFML::ProcessEvent(m_window, *event);
 
             if (event->is<sf::Event::Closed>()) {
                 m_window.close();
             }
         }
 
-        ImGui::SFML::Update(m_window, deltaClock.restart());
+     /*   ImGui::SFML::Update(m_window, deltaClock.restart());
 
         ImGui::Begin("Window title");
         ImGui::Text("Window text!");
@@ -164,24 +167,11 @@ void Scene::run()
             text.setString(displayString);
         ImGui::SameLine();
         if (ImGui::Button("Reset Circle"))
-            circle.setPosition(sf::Vector2f(10.0f, 10.0f));
+            circle.setPosition(sf::Vector2f(10.0f, 10.0f));*/
 
-        ImGui::End();
+        //ImGui::End();
 
-        m_window.clear();
-
-        circle.setPointCount(pointCount);
-        circle.setRadius(radius);
-        circle.setPosition(sf::Vector2f(circle.getPosition().x + circleSpeedX, circle.getPosition().y + circleSpeedY));
-        circle.setFillColor(sf::Color(std::uint8_t(c[0] * 255), std::uint8_t(c[1] * 255), std::uint8_t(c[2] * 255)));
-
-        if(drawCircle)
-            m_window.draw(circle);
-
-        if(drawText)
-            m_window.draw(text);
-        
         m_entities.update();
         sRender();
-    }
+     }
 };

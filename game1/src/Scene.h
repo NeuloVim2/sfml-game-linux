@@ -9,6 +9,7 @@
 #include "typedefs.h"
 #include "Components.hpp"
 #include "EntityManager.h"
+#include "ConfigParser.h"
 
 
 class Scene {
@@ -22,6 +23,7 @@ private:
 	Type m_sceneType{};
 	sf::RenderWindow& m_window;
 	EntityManager& m_entities;
+	ConfigParser& m_config;
 
 	bool m_paused{ false };
 	bool m_running { false };
@@ -37,10 +39,11 @@ private:
 	void sRender();
 
 public:
-	Scene(Type sceneType, sf::RenderWindow& window, EntityManager& eM)
+	Scene(Type sceneType, sf::RenderWindow& window, EntityManager& eM, ConfigParser& config)
 		: m_sceneType{ sceneType }
 		, m_window { window }
 		, m_entities { eM }
+		, m_config { config }
 	{
 		std::cout << "Scene constructor is called" << std::endl;
 

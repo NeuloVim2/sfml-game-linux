@@ -35,7 +35,7 @@ void Game::init()
 
 void Game::run()
 {
-    std::unique_ptr<Scene> scene = std::make_unique<Scene>(Scene::main_menu, m_window, m_entities);
+    std::unique_ptr<Scene> scene = std::make_unique<Scene>(Scene::main_menu, m_window, m_entities, m_config);
 
     scene->run();
 
