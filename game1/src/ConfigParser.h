@@ -23,7 +23,7 @@ public:
 
 	struct ShapeConfing 
 	{
-		int shapeRadius{};
+		float shapeRadius{};
 		int collisionRadius{};
 		int outlineColor[3]{};
 		int outlineThickness{};

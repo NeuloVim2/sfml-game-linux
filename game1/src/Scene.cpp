@@ -23,7 +23,54 @@ void Scene::setUp()
 
 void Scene::spawnPlayer() 
 {
+    auto player = m_entities.addEntity("player");
+    auto& playerCTransform = player->add<CTransform>(
+        Vector2f {100.0f, 100.0f}, 
+        Vector2f {11.3f, 3.5f}, 
+        Vector2f {2.0f, 2.0f}, 
+        30.0f
+    );
 
+    auto& playerCShape = player->add<CShape>(sf::CircleShape { 
+        static_cast<float>(m_config.player().shapeConfig.shapeRadius), 
+        static_cast<std::size_t>(m_config.player().shapeVertices)
+    });
+
+    // Set up colors and border thickness
+    playerCShape.circle.setFillColor(sf::Color(
+        m_config.player().shapeConfig.fillColor[0], 
+        m_config.player().shapeConfig.fillColor[1], 
+        m_config.player().shapeConfig.fillColor[2]));
+    playerCShape.circle.setOutlineColor(sf::Color(
+        m_config.player().shapeConfig.outlineColor[0], 
+        m_config.player().shapeConfig.outlineColor[1], 
+        m_config.player().shapeConfig.outlineColor[2]));
+    playerCShape.circle.setOutlineThickness(m_config.player().shapeConfig.outlineThickness);
+
+    playerCShape.circle.setPosition(sf::Vector2f(playerCTransform.pos.x, playerCTransform.pos.y));
+}
+
+void Scene::spawnEnemy()
+{ 
+    auto enemy = m_entities.addEntity("enemy");
+    auto& enemyCShape = enemy->add<CShape>(sf::CircleShape{
+        static_cast<float> (m_config.enemy().shapeConfig.shapeRadius),
+        static_cast<std::size_t> (m_config.enemy().maxVerices)
+    });
+
+    auto& enemyCTransform = enemy->add<CTransform>(
+        Vector2f {500.0f, 500.0f}, 
+        Vector2f {11.3f, 3.5f}, 
+        Vector2f {2.0f, 2.0f}, 
+        30.0f
+    );
+
+    // Set up colors and border thickness
+    enemyCShape.circle.setOutlineColor(sf::Color(
+        m_config.enemy().shapeConfig.outlineColor[0],
+        m_config.enemy().shapeConfig.outlineColor[1],
+        m_config.enemy().shapeConfig.outlineColor[2]));
+    enemyCShape.circle.setOutlineThickness(m_config.enemy().shapeConfig.outlineThickness);
 
 }
 
