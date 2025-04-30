@@ -78,6 +78,19 @@ void Scene::spawnEnemy()
     enemyCShape.circle.setPointCount(3);
 }
 
+void Scene::sRender()
+{
+    m_window.clear();
+
+    for (auto e : m_entities.getEntities())
+    {
+        m_window.draw(e->get<CShape>().circle);
+    }
+
+    //ImGui::SFML::Render(m_window);
+    m_window.display();
+}
+
 void Scene::run()
 {
     auto player = m_entities.addEntity("player");
@@ -124,8 +137,8 @@ void Scene::run()
 
 	sf::CircleShape circle(radius, pointCount);
 
-	circle.setFillColor(sf::Color(std::uint8_t(c[0] * 255), std::uint8_t(c[1] * 255), std::uint8_t(c[2] * 255)));
-    circle.setPosition(sf::Vector2f(10.0f, 10.0f));
+    spawnPlayer();
+    spawnEnemy();
 
     while (m_window.isOpen()) {
         while (const std::optional event = m_window.pollEvent()) {
@@ -168,7 +181,7 @@ void Scene::run()
         if(drawText)
             m_window.draw(text);
         
-        ImGui::SFML::Render(m_window);
-        m_window.display();
+        m_entities.update();
+        sRender();
     }
 };
