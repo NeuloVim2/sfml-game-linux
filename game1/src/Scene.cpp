@@ -72,6 +72,10 @@ void Scene::spawnEnemy()
         m_config.enemy().shapeConfig.outlineColor[2]));
     enemyCShape.circle.setOutlineThickness(m_config.enemy().shapeConfig.outlineThickness);
 
+    enemyCShape.circle.setPosition(sf::Vector2f(enemyCTransform.pos.x, enemyCTransform.pos.y));
+
+
+    enemyCShape.circle.setPointCount(3);
 }
 
 void Scene::run()
