@@ -68,14 +68,14 @@ public:
 
 class CInput: public Component {
 public:
-	int up{};
-	int down{};
-	int right{};
-	int left{};
-	int shoot{};
+	bool up{};
+	bool down{};
+	bool right{};
+	bool left{};
+	bool shoot{};
 
 	CInput() {};
-	CInput(int up, int down, int right, int left, int shoot)
+	CInput(bool up, bool down, bool right, bool left, bool shoot)
 		: up {up}, down{down}, right{right}, left{left}, shoot{shoot}
 	{};
 };
