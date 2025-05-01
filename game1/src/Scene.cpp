@@ -36,6 +36,8 @@ void Scene::spawnPlayer()
         static_cast<std::size_t>(m_config.player().shapeVertices)
     });
 
+    player->add<CInput>();
+
     // Set up colors and border thickness
     playerCShape.circle.setFillColor(sf::Color(
         m_config.player().shapeConfig.fillColor[0], 
@@ -76,6 +78,114 @@ void Scene::spawnEnemy()
 
 
     enemyCShape.circle.setPointCount(3);
+}
+
+void Scene::sMovement()
+{
+    for (auto e : m_entities.getEntitiesByTag("player"))
+    {
+
+        auto playerDiameter = 2 * m_config.player().shapeConfig.shapeRadius;
+
+        if (e->get<CInput>().up && e->get<CTransform>().pos.y > 0)
+            e->get<CTransform>().pos.y = e->get<CTransform>().pos.y - m_config.player().speed;
+
+        std::cout 
+            << "height pos y diferrence: "
+            << m_config.window().height - e->get<CTransform>().pos.y 
+            << std::endl;
+
+        if (e->get<CInput>().down && m_config.window().height - (e->get<CTransform>().pos.y + playerDiameter) >= 0)
+            e->get<CTransform>().pos.y = e->get<CTransform>().pos.y + m_config.player().speed;
+
+        if (e->get<CInput>().right && e->get<CTransform>().pos.x < (m_config.window().width - playerDiameter))
+            e->get<CTransform>().pos.x = e->get<CTransform>().pos.x + m_config.player().speed;
+
+        if (e->get<CInput>().left && e->get<CTransform>().pos.x > 0)
+            e->get<CTransform>().pos.x = e->get<CTransform>().pos.x - m_config.player().speed;
+
+		e->get<CShape>().circle.setPosition(
+			sf::Vector2f(
+				e->get<CTransform>().pos.x,
+				e->get<CTransform>().pos.y
+		));
+    }
+
+    for(auto e : m_entities.getEntities())
+    {
+        e->get<CShape>().circle.setPosition(
+            sf::Vector2f(
+				e->get<CTransform>().pos.x,
+				e->get<CTransform>().pos.y
+        ));
+    }
+}
+
+void Scene::sUserInput()
+{ 
+    auto player = m_entities.getEntitiesByTag("player")[0];
+
+	while (const std::optional event = m_window.pollEvent()) {
+		//ImGui::SFML::ProcessEvent(m_window, *event);
+
+        if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
+        {
+            if (keyPressed->scancode == sf::Keyboard::Scan::Escape)
+            {
+			    m_window.close();
+            }
+            if (keyPressed->scancode == sf::Keyboard::Scan::W)
+            {
+                player->get<CInput>().up = true;
+                std::cout << player->get<CInput>().up << std::endl;
+            }
+            if (keyPressed->scancode == sf::Keyboard::Scan::S)
+            {
+                player->get<CInput>().down = true;
+                std::cout << player->get<CInput>().down << std::endl;
+            }
+
+            if (keyPressed->scancode == sf::Keyboard::Scan::A)
+            {
+                player->get<CInput>().left = true;
+                std::cout << player->get<CInput>().left << std::endl;
+            }
+            if (keyPressed->scancode == sf::Keyboard::Scan::D)
+            {
+                player->get<CInput>().right = true;
+                std::cout << player->get<CInput>().right << std::endl;
+            }
+        }
+        if (const auto* keyReleased = event->getIf<sf::Event::KeyReleased>()) 
+        {
+            if (keyReleased->scancode == sf::Keyboard::Scan::W)
+            {
+                player->get<CInput>().up = false;
+                std::cout << player->get<CInput>().up << std::endl;
+            }
+            if (keyReleased->scancode == sf::Keyboard::Scan::S)
+            {
+                player->get<CInput>().down = false;
+                std::cout << player->get<CInput>().down << std::endl;
+            }
+            if (keyReleased->scancode == sf::Keyboard::Scan::A)
+            {
+                player->get<CInput>().left = false;
+                std::cout << player->get<CInput>().left << std::endl;
+            }
+            if (keyReleased->scancode == sf::Keyboard::Scan::D)
+            {
+                player->get<CInput>().right = false;
+                std::cout << player->get<CInput>().right << std::endl;
+            }
+
+        }
+
+		if (event->is<sf::Event::Closed>()) {
+			m_window.close();
+		}
+
+	}
 }
 
 void Scene::sRender()
@@ -144,13 +254,6 @@ void Scene::run()
     spawnEnemy();
 
     while (m_window.isOpen()) {
-        while (const std::optional event = m_window.pollEvent()) {
-            //ImGui::SFML::ProcessEvent(m_window, *event);
-
-            if (event->is<sf::Event::Closed>()) {
-                m_window.close();
-            }
-        }
 
      /*   ImGui::SFML::Update(m_window, deltaClock.restart());
 
@@ -172,6 +275,8 @@ void Scene::run()
         //ImGui::End();
 
         m_entities.update();
+        sUserInput();
+        sMovement();
         sRender();
      }
 };
