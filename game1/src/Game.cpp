@@ -27,6 +27,7 @@ void Game::init()
 	);
 
 	m_window.setFramerateLimit(m_config.window().frameLimit);
+	m_window.setVerticalSyncEnabled(true);
 	ImGui::SFML::Init(m_window);
 
 	ImGui::GetStyle().ScaleAllSizes(2.0f);
