@@ -101,8 +101,7 @@ void Scene::spawnEnemy()
 
     enemyCShape.circle.setPosition(sf::Vector2f(enemyCTransform.pos.x, enemyCTransform.pos.y));
     enemyCShape.circle.setPointCount(randomPointCount);
-
-    enemyCShape.circle.setPointCount(3);
+    enemyCShape.circle.setOrigin(sf::Vector2f(enemyCShape.circle.getRadius(), enemyCShape.circle.getRadius()));
 }
 
 void Scene::sMovement()
