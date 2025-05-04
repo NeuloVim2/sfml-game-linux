@@ -63,7 +63,8 @@ public:
 	CShape() {};
 	CShape(sf::CircleShape circle)
 		: circle {circle}	
-	{};
+	{
+	};
 };
 
 class CInput: public Component {

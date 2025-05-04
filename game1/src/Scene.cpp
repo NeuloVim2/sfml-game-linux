@@ -25,10 +25,10 @@ void Scene::spawnPlayer()
 {
     auto player = m_entities.addEntity("player");
     auto& playerCTransform = player->add<CTransform>(
-        Vector2f {100.0f, 100.0f}, 
+        Vector2f {static_cast<float>(m_config.window().width/ 2), static_cast<float>(m_config.window().height / 2)},
         Vector2f {11.3f, 3.5f}, 
         Vector2f {2.0f, 2.0f}, 
-        30.0f
+        0.0f
     );
 
     auto& playerCShape = player->add<CShape>(sf::CircleShape { 
@@ -49,7 +49,16 @@ void Scene::spawnPlayer()
         m_config.player().shapeConfig.outlineColor[2]));
     playerCShape.circle.setOutlineThickness(m_config.player().shapeConfig.outlineThickness);
 
-    playerCShape.circle.setPosition(sf::Vector2f(playerCTransform.pos.x, playerCTransform.pos.y));
+    playerCShape.circle.setPosition(
+        sf::Vector2f(
+            playerCTransform.pos.x, 
+            playerCTransform.pos.y)
+    );
+    playerCShape.circle.setOrigin(
+        sf::Vector2f(
+            playerCShape.circle.getRadius(), 
+            playerCShape.circle.getRadius())
+    );
 }
 
 void Scene::spawnEnemy()
