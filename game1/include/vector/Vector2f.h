@@ -17,8 +17,10 @@ public:
 
     // Vector2f operator=(const float* arr);
     Vector2f operator+(const Vector2f& operand);
+    Vector2f operator+=(const Vector2f& operand);
     Vector2f operator+(const float scalar);
     Vector2f operator-(const Vector2f& operand);
+    Vector2f operator-=(const Vector2f& operand);
     Vector2f operator-(const float scalar);
     Vector2f operator*(const float scalar);
 

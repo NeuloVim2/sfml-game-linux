@@ -14,6 +14,13 @@ Vector2f Vector2f::operator+(const Vector2f& vector) {
     return temp;
 }
 
+Vector2f Vector2f::operator+=(const Vector2f& vector) {
+    this->x += vector.x;
+    this->y += vector.y;
+
+    return *this;
+}
+
 Vector2f Vector2f::operator+(const float scalar) {
     Vector2f temp;
     temp.x = x + scalar;
@@ -26,6 +33,12 @@ Vector2f Vector2f::operator-(const Vector2f& vector) {
     temp.x = x - vector.x;
     temp.y = y - vector.y;
     return temp;
+}
+
+Vector2f Vector2f::operator-=(const Vector2f& vector) {
+    this->x -= vector.x;
+    this->y -= vector.y;
+    return *this;
 }
 
 Vector2f Vector2f::operator-(const float scalar) {
