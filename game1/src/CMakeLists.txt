@@ -20,6 +20,9 @@ target_include_directories(vector
                            PUBLIC 
                            ${PROJECT_SOURCE_DIR}/include/vector
 )
+target_link_libraries(vector
+                      PUBLIC
+                        SFML::System)
 
 
 message("Include directories ${INCLUDE_DIRECTORIES}")
