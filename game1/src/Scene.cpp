@@ -63,6 +63,22 @@ void Scene::spawnPlayer()
 
 void Scene::spawnEnemy()
 { 
+    float diameter = 2 * m_config.enemy().shapeConfig.shapeRadius;
+    float minX = diameter;
+    float maxX = m_config.window().width - diameter;
+    float minY = diameter;
+    float maxY = m_config.window().height - diameter;
+    float minVertices = m_config.enemy().minVerices;
+    float maxVertices = m_config.enemy().maxVerices;
+
+    //std::cout << "random number: " << rand() << std::endl;
+    float randomX = minX + (rand() % (1 + (int)maxX - (int)minX));
+    float randomY = minY + (rand() % (1 + (int)maxY - (int)minY));
+    float randomPointCount = minVertices + (rand() % (1 + (int)maxVertices - (int)minVertices));
+
+    std::cout << "random x: " << randomX << std::endl;
+    std::cout << "random y: " << randomY << std::endl;
+
     auto enemy = m_entities.addEntity("enemy");
     auto& enemyCShape = enemy->add<CShape>(sf::CircleShape{
         static_cast<float> (m_config.enemy().shapeConfig.shapeRadius),
@@ -70,10 +86,10 @@ void Scene::spawnEnemy()
     });
 
     auto& enemyCTransform = enemy->add<CTransform>(
-        Vector2f {500.0f, 500.0f}, 
-        Vector2f {11.3f, 3.5f}, 
-        Vector2f {2.0f, 2.0f}, 
-        30.0f
+        Vector2f {static_cast<float>(randomX), static_cast<float>(randomY)},
+        Vector2f {m_config.enemy().maxSpeed, m_config.enemy().maxSpeed},
+        Vector2f {0.0f, 0.0f}, 
+        0.0f
     );
 
     // Set up colors and border thickness
@@ -84,7 +100,7 @@ void Scene::spawnEnemy()
     enemyCShape.circle.setOutlineThickness(m_config.enemy().shapeConfig.outlineThickness);
 
     enemyCShape.circle.setPosition(sf::Vector2f(enemyCTransform.pos.x, enemyCTransform.pos.y));
-
+    enemyCShape.circle.setPointCount(randomPointCount);
 
     enemyCShape.circle.setPointCount(3);
 }
@@ -197,6 +213,15 @@ void Scene::sUserInput()
 	}
 }
 
+void Scene::sEnemySpawner(int& framePassed)
+{
+    if (framePassed >= 90)
+    {
+        spawnEnemy();
+        framePassed = 0;
+    }
+}
+
 void Scene::sRender(sf::Text& text)
 {
     m_window.clear();
@@ -261,8 +286,12 @@ void Scene::run()
  //   circle.setPosition(sf::Vector2f(10.0f, 10.0f));
 
     spawnPlayer();
-    spawnEnemy();
 
+    int framePassed{};
+
+    sf::Clock clock;
+
+    srand(time(NULL));
     while (m_window.isOpen()) {
         text.setString(std::to_string((int)(1.0f / clock.restart().asSeconds())));
      /*   ImGui::SFML::Update(m_window, deltaClock.restart());
@@ -287,7 +316,9 @@ void Scene::run()
         m_entities.update();
         sUserInput();
         sMovement();
-        sRender();
+        sEnemySpawner(framePassed);
         sRender(text);
+
+        ++framePassed;
      }
 };
