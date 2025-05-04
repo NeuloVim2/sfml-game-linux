@@ -19,6 +19,12 @@ Compare two vector for equalaty
  vector1 == vector2
  vector1 != vector2
 
- spawnEnemy()
-  get data from config
- spawnEnemyFragments()
+fix issue with increased players' velocity when moving diagonally
+
+spawnBullet() in a direction of mouse
+move spawnBullet() in a dircetion of mouse
+fade away spawned bullet when its slowly reaching its lifespan end
+
+display on GUI all existing entity
+toggle on/off on GUI working system
+display on GUI fps?

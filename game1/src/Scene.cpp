@@ -103,6 +103,11 @@ void Scene::spawnEnemy()
     enemyCShape.circle.setOrigin(sf::Vector2f(enemyCShape.circle.getRadius(), enemyCShape.circle.getRadius()));
 }
 
+void Scene::spawnBullet()
+{
+    
+}
+
 void Scene::sMovement()
 {
     for (auto e : m_entities.getEntitiesByTag("player"))
@@ -152,53 +157,26 @@ void Scene::sUserInput()
         if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
         {
             if (keyPressed->scancode == sf::Keyboard::Scan::Escape)
-            {
 			    m_window.close();
-            }
             if (keyPressed->scancode == sf::Keyboard::Scan::W)
-            {
                 player->get<CInput>().up = true;
-                std::cout << player->get<CInput>().up << std::endl;
-            }
             if (keyPressed->scancode == sf::Keyboard::Scan::S)
-            {
                 player->get<CInput>().down = true;
-                std::cout << player->get<CInput>().down << std::endl;
-            }
-
             if (keyPressed->scancode == sf::Keyboard::Scan::A)
-            {
                 player->get<CInput>().left = true;
-                std::cout << player->get<CInput>().left << std::endl;
-            }
             if (keyPressed->scancode == sf::Keyboard::Scan::D)
-            {
                 player->get<CInput>().right = true;
-                std::cout << player->get<CInput>().right << std::endl;
-            }
         }
         if (const auto* keyReleased = event->getIf<sf::Event::KeyReleased>()) 
         {
             if (keyReleased->scancode == sf::Keyboard::Scan::W)
-            {
                 player->get<CInput>().up = false;
-                std::cout << player->get<CInput>().up << std::endl;
-            }
             if (keyReleased->scancode == sf::Keyboard::Scan::S)
-            {
                 player->get<CInput>().down = false;
-                std::cout << player->get<CInput>().down << std::endl;
-            }
             if (keyReleased->scancode == sf::Keyboard::Scan::A)
-            {
                 player->get<CInput>().left = false;
-                std::cout << player->get<CInput>().left << std::endl;
-            }
             if (keyReleased->scancode == sf::Keyboard::Scan::D)
-            {
                 player->get<CInput>().right = false;
-                std::cout << player->get<CInput>().right << std::endl;
-            }
 
         }
 
