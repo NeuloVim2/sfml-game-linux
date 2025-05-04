@@ -197,7 +197,7 @@ void Scene::sUserInput()
 	}
 }
 
-void Scene::sRender()
+void Scene::sRender(sf::Text& text)
 {
     m_window.clear();
 
@@ -205,6 +205,7 @@ void Scene::sRender()
     {
         m_window.draw(e->get<CShape>().circle);
     }
+    m_window.draw(text);
 
     //ImGui::SFML::Render(m_window);
     m_window.display();
@@ -248,11 +249,11 @@ void Scene::run()
         exit(-1);
     };
 
-    sf::Text text(font, "Sample Text", m_config.font().fontSize);
+   sf::Text text(font, "0", m_config.font().fontSize);
 
     text.setFillColor(sf::Color(m_config.font().rgb[0], m_config.font().rgb[1], m_config.font().rgb[2]));
 
-    text.setPosition(sf::Vector2f(0, HEIGHT - (float) text.getCharacterSize()));
+    text.setPosition(sf::Vector2f(10.0f, 0.0f + (float)text.getCharacterSize()));
 
 	//sf::CircleShape circle(radius, pointCount);
 
@@ -263,7 +264,7 @@ void Scene::run()
     spawnEnemy();
 
     while (m_window.isOpen()) {
-
+        text.setString(std::to_string((int)(1.0f / clock.restart().asSeconds())));
      /*   ImGui::SFML::Update(m_window, deltaClock.restart());
 
         ImGui::Begin("Window title");
@@ -287,5 +288,6 @@ void Scene::run()
         sUserInput();
         sMovement();
         sRender();
+        sRender(text);
      }
 };
