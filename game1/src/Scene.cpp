@@ -108,18 +108,18 @@ void Scene::sMovement()
     for (auto e : m_entities.getEntitiesByTag("player"))
     {
 
-        auto playerDiameter = 2 * m_config.player().shapeConfig.shapeRadius;
+        auto playerRadius = m_config.player().shapeConfig.shapeRadius;
 
-        if (e->get<CInput>().up && e->get<CTransform>().pos.y > 0)
+        if (e->get<CInput>().up && e->get<CTransform>().pos.y - playerRadius > 0)
             e->get<CTransform>().pos.y = e->get<CTransform>().pos.y - m_config.player().speed;
 
-        if (e->get<CInput>().down && m_config.window().height - (e->get<CTransform>().pos.y + playerDiameter) >= 0)
+        if (e->get<CInput>().down && m_config.window().height - (e->get<CTransform>().pos.y + playerRadius) >= 0)
             e->get<CTransform>().pos.y = e->get<CTransform>().pos.y + m_config.player().speed;
 
-        if (e->get<CInput>().right && e->get<CTransform>().pos.x < (m_config.window().width - playerDiameter))
+        if (e->get<CInput>().right && e->get<CTransform>().pos.x < (m_config.window().width - playerRadius))
             e->get<CTransform>().pos.x = e->get<CTransform>().pos.x + m_config.player().speed;
 
-        if (e->get<CInput>().left && e->get<CTransform>().pos.x > 0)
+        if (e->get<CInput>().left && e->get<CTransform>().pos.x - playerRadius > 0)
             e->get<CTransform>().pos.x = e->get<CTransform>().pos.x - m_config.player().speed;
 
         e->get<CTransform>().angle += 0.01f;
