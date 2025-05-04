@@ -1,5 +1,6 @@
 #include <filesystem>
 #include <vector>
+#include <cmath>
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Font.hpp>
@@ -70,13 +71,9 @@ void Scene::spawnEnemy()
     float minVertices = m_config.enemy().minVerices;
     float maxVertices = m_config.enemy().maxVerices;
 
-    //std::cout << "random number: " << rand() << std::endl;
     float randomX = minX + (rand() % (1 + (int)maxX - (int)minX));
     float randomY = minY + (rand() % (1 + (int)maxY - (int)minY));
     float randomPointCount = minVertices + (rand() % (1 + (int)maxVertices - (int)minVertices));
-
-    std::cout << "random x: " << randomX << std::endl;
-    std::cout << "random y: " << randomY << std::endl;
 
     auto enemy = m_entities.addEntity("enemy");
     auto& enemyCShape = enemy->add<CShape>(sf::CircleShape{
@@ -112,29 +109,39 @@ void Scene::sMovement()
 {
     for (auto e : m_entities.getEntitiesByTag("player"))
     {
-
         auto playerRadius = m_config.player().shapeConfig.shapeRadius;
 
         if (e->get<CInput>().up && e->get<CTransform>().pos.y - playerRadius > 0)
-            e->get<CTransform>().pos.y = e->get<CTransform>().pos.y - m_config.player().speed;
+            //e->get<CTransform>().pos.y = e->get<CTransform>().pos.y - m_config.player().speed;
+            e->get<CTransform>().vel -= Vector2f{ 0.0f, 1.0f };
 
         if (e->get<CInput>().down && m_config.window().height - (e->get<CTransform>().pos.y + playerRadius) >= 0)
-            e->get<CTransform>().pos.y = e->get<CTransform>().pos.y + m_config.player().speed;
+            //e->get<CTransform>().pos.y = e->get<CTransform>().pos.y + m_config.player().speed;
+            e->get<CTransform>().vel += Vector2f{ 0.0f, 1.0f };
 
         if (e->get<CInput>().right && e->get<CTransform>().pos.x < (m_config.window().width - playerRadius))
-            e->get<CTransform>().pos.x = e->get<CTransform>().pos.x + m_config.player().speed;
+            //e->get<CTransform>().pos.x = e->get<CTransform>().pos.x + m_config.player().speed;
+            e->get<CTransform>().vel += Vector2f{ 1.0f, 0.0f };
 
         if (e->get<CInput>().left && e->get<CTransform>().pos.x - playerRadius > 0)
-            e->get<CTransform>().pos.x = e->get<CTransform>().pos.x - m_config.player().speed;
+            //e->get<CTransform>().pos.x = e->get<CTransform>().pos.x - m_config.player().speed;
+            e->get<CTransform>().vel -= Vector2f{ 1.0f, 0.0f };
+
+
+        // calcualate velocity vector x and y when moving at 45(W-D, W-A, etc.) angle
+        // cos(45) and sin(45) are 0.70710678118
+        float finalSpeed = m_config.player().speed;
+        if (e->get<CTransform>().vel.x != 0 && e->get<CTransform>().vel.y)
+            finalSpeed = m_config.player().speed * 0.70710678118;
+
+        e->get<CTransform>().pos += e->get<CTransform>().vel * finalSpeed;
+		e->get<CShape>().circle.setPosition(e->get<CTransform>().pos);
 
         e->get<CTransform>().angle += 0.01f;
-
         e->get<CShape>().circle.setRotation(sf::radians(e->get<CTransform>().angle));
-		e->get<CShape>().circle.setPosition(
-			sf::Vector2f(
-				e->get<CTransform>().pos.x,
-				e->get<CTransform>().pos.y
-		));
+
+        // reset velocity
+        e->get<CTransform>().vel = Vector2f( 0.0f, 0.0f );
     }
 
     for(auto e : m_entities.getEntities())
