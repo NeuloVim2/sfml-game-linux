@@ -18,3 +18,7 @@ Add negate operation for vector:
 Compare two vector for equalaty
  vector1 == vector2
  vector1 != vector2
+
+ spawnEnemy()
+  get data from config
+ spawnEnemyFragments()

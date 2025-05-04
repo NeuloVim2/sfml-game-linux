@@ -1,4 +1,3 @@
-#include <iostream>
 #include <filesystem>
 #include <vector>
 
@@ -114,11 +113,6 @@ void Scene::sMovement()
         if (e->get<CInput>().up && e->get<CTransform>().pos.y > 0)
             e->get<CTransform>().pos.y = e->get<CTransform>().pos.y - m_config.player().speed;
 
-        std::cout 
-            << "height pos y diferrence: "
-            << m_config.window().height - e->get<CTransform>().pos.y 
-            << std::endl;
-
         if (e->get<CInput>().down && m_config.window().height - (e->get<CTransform>().pos.y + playerDiameter) >= 0)
             e->get<CTransform>().pos.y = e->get<CTransform>().pos.y + m_config.player().speed;
 
@@ -128,6 +122,9 @@ void Scene::sMovement()
         if (e->get<CInput>().left && e->get<CTransform>().pos.x > 0)
             e->get<CTransform>().pos.x = e->get<CTransform>().pos.x - m_config.player().speed;
 
+        e->get<CTransform>().angle += 0.01f;
+
+        e->get<CShape>().circle.setRotation(sf::radians(e->get<CTransform>().angle));
 		e->get<CShape>().circle.setPosition(
 			sf::Vector2f(
 				e->get<CTransform>().pos.x,

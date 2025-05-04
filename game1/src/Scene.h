@@ -6,6 +6,8 @@
 #include <cstdint>
 #include <iostream>
 
+#include <SFML/Graphics/Text.hpp>
+
 #include "typedefs.h"
 #include "Components.hpp"
 #include "EntityManager.h"
@@ -34,9 +36,9 @@ private:
 
 	void sMovement();
 	void sUserInput();
-	void sEnemySpawner();
+	void sEnemySpawner(int& framePassed);
 	void sCollision();
-	void sRender();
+	void sRender(sf::Text&);
 
 public:
 	Scene(Type sceneType, sf::RenderWindow& window, EntityManager& eM, ConfigParser& config)
