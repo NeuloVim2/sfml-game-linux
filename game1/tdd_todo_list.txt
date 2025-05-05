@@ -20,11 +20,13 @@ Compare two vector for equalaty
  vector1 != vector2
 
 fix issue with increased players' velocity when moving diagonally - done
+spawnBullet() in a direction of mouse - done
+move spawnBullet() in a dircetion of mouse - done
 
-spawnBullet() in a direction of mouse
-move spawnBullet() in a dircetion of mouse
-fade away spawned bullet when its slowly reaching its lifespan end
-
-display on GUI all existing entity
-toggle on/off on GUI working system
+display on GUI all existing entity; separate tab
+toggle on/off on GUI working system; separate tab
 display on GUI fps?
+
+fade away spawned bullet when its slowly reaching its lifespan end
+decrease rate of bullets fire for player 
+fix issue when bullet velocity increase/decrease with players movement

@@ -259,6 +259,45 @@ void Scene::sBulletSpawner()
         spawnBullet();
 }
 
+void Scene::sGUI()
+{
+	ImGui::Begin("Geometry Wars GUI");
+	ImGui::Text("Geometry Wars");
+    ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
+    if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))
+    {
+        if (ImGui::BeginTabItem("Avocado"))
+        {
+            ImGui::Text("This is the Avocado tab!\nblah blah blah blah blah");
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Broccoli"))
+        {
+            ImGui::Text("This is the Broccoli tab!\nblah blah blah blah blah");
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Cucumber"))
+        {
+            ImGui::Text("This is the Cucumber tab!\nblah blah blah blah blah");
+            ImGui::EndTabItem();
+        }
+        ImGui::EndTabBar();
+    }
+	//ImGui::Checkbox("Draw Circle", &drawCircle);
+	//ImGui::SameLine();
+	//ImGui::Checkbox("Draw Text", &drawText);
+	//ImGui::SliderFloat("Radius", &radius, 0.0f, 300.0f);
+	//ImGui::SliderInt("Sides", &pointCount, 3, 64);
+	//ImGui::ColorEdit3("Color Circle", c);
+	//ImGui::InputText("Text", displayString, 255);
+	//if (ImGui::Button("Set Text"))
+	//text.setString(displayString);
+	//ImGui::SameLine();
+	//if (ImGui::Button("Reset Circle"))
+
+    ImGui::End();
+}
+
 void Scene::sRender(sf::Text& text)
 {
     m_window.clear();
@@ -269,7 +308,7 @@ void Scene::sRender(sf::Text& text)
     }
     m_window.draw(text);
 
-    //ImGui::SFML::Render(m_window);
+    ImGui::SFML::Render(m_window);
     m_window.display();
 }
 
@@ -327,34 +366,19 @@ void Scene::run()
     int framePassed{};
 
     sf::Clock clock;
+    sf::Clock deltaClock;
 
     srand(time(NULL));
     while (m_window.isOpen()) {
         text.setString(std::to_string((int)(1.0f / clock.restart().asSeconds())));
-     /*   ImGui::SFML::Update(m_window, deltaClock.restart());
-
-        ImGui::Begin("Window title");
-        ImGui::Text("Window text!");
-        ImGui::Checkbox("Draw Circle", &drawCircle);
-        ImGui::SameLine();
-        ImGui::Checkbox("Draw Text", &drawText);
-        ImGui::SliderFloat("Radius", &radius, 0.0f, 300.0f);
-        ImGui::SliderInt("Sides", &pointCount, 3, 64);
-        ImGui::ColorEdit3("Color Circle", c);
-        ImGui::InputText("Text", displayString, 255);
-        if (ImGui::Button("Set Text"))
-            text.setString(displayString);
-        ImGui::SameLine();
-        if (ImGui::Button("Reset Circle"))
-            circle.setPosition(sf::Vector2f(10.0f, 10.0f));*/
-
-        //ImGui::End();
+        ImGui::SFML::Update(m_window, deltaClock.restart());
 
         m_entities.update();
         sUserInput();
         sBulletSpawner();
         sMovement();
         sEnemySpawner(framePassed);
+        sGUI();
         sRender(text);
 
         ++framePassed;
