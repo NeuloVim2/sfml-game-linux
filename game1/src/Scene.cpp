@@ -194,10 +194,14 @@ void Scene::sUserInput()
     auto player = m_entities.getEntitiesByTag("player")[0];
 
 	while (const std::optional event = m_window.pollEvent()) {
-		//ImGui::SFML::ProcessEvent(m_window, *event);
+		ImGui::SFML::ProcessEvent(m_window, *event);
+        auto& io = ImGui::GetIO();
 
         if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
         {
+            if (io.WantCaptureKeyboard) 
+                return;
+
             if (keyPressed->scancode == sf::Keyboard::Scan::Escape)
 			    m_window.close();
             if (keyPressed->scancode == sf::Keyboard::Scan::W)
@@ -223,6 +227,9 @@ void Scene::sUserInput()
         }
         if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())
         {
+            if (io.WantCaptureMouse)
+                return;
+
             if (mouseButtonPressed->button == sf::Mouse::Button::Left)
             {
                 player->get<CInput>().shoot = true;
