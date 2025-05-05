@@ -19,7 +19,7 @@ Compare two vector for equalaty
  vector1 == vector2
  vector1 != vector2
 
-fix issue with increased players' velocity when moving diagonally
+fix issue with increased players' velocity when moving diagonally - done
 
 spawnBullet() in a direction of mouse
 move spawnBullet() in a dircetion of mouse

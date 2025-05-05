@@ -37,6 +37,7 @@ private:
 	void sMovement();
 	void sUserInput();
 	void sEnemySpawner(int& framePassed);
+	void sBulletSpawner();
 	void sCollision();
 	void sRender(sf::Text&);
 

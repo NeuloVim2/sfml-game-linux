@@ -102,7 +102,43 @@ void Scene::spawnEnemy()
 
 void Scene::spawnBullet()
 {
-    
+    auto bullet = m_entities.addEntity("bullet");
+    auto& bulletCShape = bullet->add<CShape>(sf::CircleShape{
+        static_cast<float> (m_config.bullet().shapeConfig.shapeRadius),
+        static_cast<std::size_t> (m_config.bullet().shapeVertices)
+    });
+
+    auto& playerPos = m_entities.getEntitiesByTag("player")[0]->get<CTransform>().pos;
+    auto& bulletCTransform = bullet->add<CTransform>(
+        Vector2f{ playerPos.x, playerPos.y },
+        Vector2f{ m_config.bullet().speed, m_config.bullet().speed },
+        Vector2f{ 0.0f, 0.0f },
+        0.0f);
+
+    sf::Vector2i mousePos = sf::Mouse::getPosition(m_window);
+    Vector2f differanceVector = Vector2f(
+        (float)mousePos.x - playerPos.x, 
+        (float)mousePos.y - playerPos.y);
+
+    float differanceVectorLength = sqrt((differanceVector.x * differanceVector.x) + (differanceVector.y * differanceVector.y));
+    Vector2f normilizedDifferanceVector { differanceVector.x / differanceVectorLength, differanceVector.y / differanceVectorLength };
+
+    bulletCTransform.vel = Vector2f(normilizedDifferanceVector.x * m_config.bullet().speed, normilizedDifferanceVector.y * m_config.bullet().speed);
+    std::cout << "vel.x: " << bulletCTransform.vel.x << std::endl;
+    std::cout << "vel.y: " << bulletCTransform.vel.y << std::endl;
+    bulletCTransform.pos += bulletCTransform.vel;
+
+    bulletCShape.circle.setPosition(bulletCTransform.pos);
+    bulletCShape.circle.setOutlineColor(sf::Color(
+        m_config.bullet().shapeConfig.outlineColor[0],
+        m_config.bullet().shapeConfig.outlineColor[1],
+        m_config.bullet().shapeConfig.outlineColor[2]));
+    bulletCShape.circle.setFillColor(sf::Color(
+        m_config.bullet().shapeConfig.fillColor[0],
+        m_config.bullet().shapeConfig.fillColor[1],
+        m_config.bullet().shapeConfig.fillColor[2]));
+    bulletCShape.circle.setOutlineThickness(m_config.bullet().shapeConfig.outlineThickness);
+    bulletCShape.circle.setPointCount(m_config.bullet().shapeVertices);
 }
 
 void Scene::sMovement()
@@ -144,13 +180,12 @@ void Scene::sMovement()
         e->get<CTransform>().vel = Vector2f( 0.0f, 0.0f );
     }
 
-    for(auto e : m_entities.getEntities())
+    for(auto e : m_entities.getEntitiesByTag("bullet"))
     {
+        e->get<CTransform>().pos += e->get<CTransform>().vel;
         e->get<CShape>().circle.setPosition(
-            sf::Vector2f(
-				e->get<CTransform>().pos.x,
-				e->get<CTransform>().pos.y
-        ));
+				e->get<CTransform>().pos
+        );
     }
 }
 
@@ -186,7 +221,20 @@ void Scene::sUserInput()
                 player->get<CInput>().right = false;
 
         }
-
+        if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())
+        {
+            if (mouseButtonPressed->button == sf::Mouse::Button::Left)
+            {
+                player->get<CInput>().shoot = true;
+            }
+        }
+        if (const auto* mouseButtonReleased = event->getIf<sf::Event::MouseButtonReleased>())
+        {
+            if (mouseButtonReleased->button == sf::Mouse::Button::Left)
+            {
+                player->get<CInput>().shoot = false;
+            }
+        }
 		if (event->is<sf::Event::Closed>()) {
 			m_window.close();
 		}
@@ -201,6 +249,14 @@ void Scene::sEnemySpawner(int& framePassed)
         spawnEnemy();
         framePassed = 0;
     }
+}
+
+void Scene::sBulletSpawner() 
+{
+    auto player = m_entities.getEntitiesByTag("player")[0];
+
+    if (player->get<CInput>().shoot)
+        spawnBullet();
 }
 
 void Scene::sRender(sf::Text& text)
@@ -296,6 +352,7 @@ void Scene::run()
 
         m_entities.update();
         sUserInput();
+        sBulletSpawner();
         sMovement();
         sEnemySpawner(framePassed);
         sRender(text);
