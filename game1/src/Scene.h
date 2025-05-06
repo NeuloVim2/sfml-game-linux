@@ -30,6 +30,14 @@ private:
 	bool m_paused{ false };
 	bool m_running { false };
 
+	bool m_movementSystemEnabled{ true };
+	bool m_inputSystemEnabled{ true };
+	bool m_colisionSystemEnabled{ true };
+	bool m_enemySpawnerSystemEnabled{ true };
+	bool m_bulletSpawnerSystemEnabled{ true };
+	bool m_GUISystemEnabled{ true };
+	bool m_renderSystemEnabled{ true };
+
 	void spawnPlayer();
 	void spawnEnemy();
 	void spawnBullet();

@@ -313,7 +313,19 @@ void Scene::sGUI()
     {
         if (ImGui::BeginTabItem("Systems"))
         {
-            ImGui::Text("This is the Avocado tab!\nblah blah blah blah blah");
+            ImGui::Checkbox("On/Off Movement System", &m_movementSystemEnabled);
+            ImGui::Checkbox("On/Off Colision System", &m_colisionSystemEnabled);
+
+            ImGui::Checkbox("On/Off Enymy Spawn System", &m_enemySpawnerSystemEnabled);
+            ImGui::SliderInt("Enemy spawn rate", &m_spawnRate, 0, 220);
+            if(ImGui::Button("Manual Spawn"))
+            {
+                spawnEnemy();
+            };
+
+            ImGui::Checkbox("On/Off Bullet Spawn System", &m_bulletSpawnerSystemEnabled);
+            ImGui::Checkbox("On/Off Render System", &m_renderSystemEnabled);
+            ImGui::Checkbox("On/Off GUI", &m_GUISystemEnabled);
             ImGui::EndTabItem();
         }
         if (ImGui::BeginTabItem("Entites"))
@@ -370,11 +382,14 @@ void Scene::sRender(sf::Text& text)
 {
     m_window.clear();
 
+    if (m_renderSystemEnabled)
+    {
     for (auto e : m_entities.getEntities())
     {
         m_window.draw(e->get<CShape>().circle);
     }
     m_window.draw(text);
+    }
 
     ImGui::SFML::Render(m_window);
     m_window.display();
@@ -442,10 +457,15 @@ void Scene::run()
         ImGui::SFML::Update(m_window, deltaClock.restart());
 
         m_entities.update();
+        if(m_inputSystemEnabled)
         sUserInput();
+        if(m_bulletSpawnerSystemEnabled)
         sBulletSpawner();
+        if(m_movementSystemEnabled)
         sMovement();
+        if(m_enemySpawnerSystemEnabled)
         sEnemySpawner(framePassed);
+        if(m_GUISystemEnabled)
         sGUI();
         sRender(text);
 
