@@ -18,15 +18,14 @@ void EntityManager::update()
 		)
 	, m_entities.end());
 
-	std::for_each(m_enityMap.begin(), m_enityMap.end(), 
-		[](auto mE) { 
-			mE.second.erase(std::remove_if(mE.second.begin(), mE.second.end(),
+	for (auto& e : m_enityMap) 
+	{
+		e.second.erase(std::remove_if(e.second.begin(), e.second.end(),
 				[](auto e) { 
 					return !e->isAlive();
 				})
-			, mE.second.end());
-		});
-
+		, e.second.end());
+	}
 }
 
 std::shared_ptr<Entity> EntityManager::addEntity(const std::string& tag)
