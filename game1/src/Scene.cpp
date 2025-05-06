@@ -1,5 +1,6 @@
 #include <filesystem>
 #include <vector>
+#include <string>
 #include <cmath>
 
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -137,8 +138,6 @@ void Scene::spawnBullet()
     Vector2f normilizedDifferanceVector { differanceVector.x / differanceVectorLength, differanceVector.y / differanceVectorLength };
 
     bulletCTransform.vel = Vector2f(normilizedDifferanceVector.x * m_config.bullet().speed, normilizedDifferanceVector.y * m_config.bullet().speed);
-    std::cout << "vel.x: " << bulletCTransform.vel.x << std::endl;
-    std::cout << "vel.y: " << bulletCTransform.vel.y << std::endl;
     bulletCTransform.pos += bulletCTransform.vel;
 
     bulletCShape.circle.setPosition(bulletCTransform.pos);
@@ -280,6 +279,31 @@ void Scene::sBulletSpawner()
         spawnBullet();
 }
 
+void Scene::displayEntityInfoOnGui(const std::shared_ptr<Entity> e)
+{
+    float c[3]{
+		 e->get<CShape>().circle.getFillColor().r / (float)255,
+		 e->get<CShape>().circle.getFillColor().g / (float)255,
+		 e->get<CShape>().circle.getFillColor().b / (float)255
+    };
+
+    ImGui::PushID(e->id());
+    ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(c[0], c[1], c[2]));
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(c[0], c[1] - 0.1, c[2] + 0.01));
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(c[0], c[1], c[2]));
+    if (ImGui::Button("D"))
+        e->destroy();
+	ImGui::PopStyleColor(3);
+	ImGui::PopID();
+	ImGui::SameLine();
+	ImGui::Text(std::to_string(e->id()).c_str());
+	ImGui::SameLine();
+	ImGui::Text(e->tag().c_str());
+	ImGui::SameLine();
+	ImGui::Text(("( " + std::to_string(e->get<CTransform>().pos.x) + " " + std::to_string(e->get<CTransform>().pos.y) + " )").c_str());
+}
+
+
 void Scene::sGUI()
 {
 	ImGui::Begin("Geometry Wars GUI");
@@ -287,20 +311,43 @@ void Scene::sGUI()
     ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
     if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))
     {
-        if (ImGui::BeginTabItem("Avocado"))
+        if (ImGui::BeginTabItem("Systems"))
         {
             ImGui::Text("This is the Avocado tab!\nblah blah blah blah blah");
             ImGui::EndTabItem();
         }
-        if (ImGui::BeginTabItem("Broccoli"))
+        if (ImGui::BeginTabItem("Entites"))
         {
-            ImGui::Text("This is the Broccoli tab!\nblah blah blah blah blah");
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Cucumber"))
-        {
-            ImGui::Text("This is the Cucumber tab!\nblah blah blah blah blah");
-            ImGui::EndTabItem();
+            if (ImGui::CollapsingHeader("player"))
+            {
+                for (auto e : m_entities.getEntitiesByTag("player"))
+                {
+                    displayEntityInfoOnGui(e);
+                }
+            }
+            if (ImGui::CollapsingHeader("enemy"))
+            {
+                for (auto e : m_entities.getEntitiesByTag("enemy"))
+                {
+                    displayEntityInfoOnGui(e);
+                }
+            }
+            if (ImGui::CollapsingHeader("bullet"))
+            {
+                for (auto e : m_entities.getEntitiesByTag("bullet"))
+                {
+                    displayEntityInfoOnGui(e);
+                }
+            }
+            if (ImGui::CollapsingHeader("all entites"))
+            {
+                for (auto e : m_entities.getEntities())
+                {
+                    displayEntityInfoOnGui(e);
+                }
+            }
+
+		    ImGui::EndTabItem();
         }
         ImGui::EndTabBar();
     }

@@ -21,9 +21,9 @@ void EntityManager::update()
 	for (auto& e : m_enityMap) 
 	{
 		e.second.erase(std::remove_if(e.second.begin(), e.second.end(),
-				[](auto e) { 
-					return !e->isAlive();
-				})
+			[](auto e) { 
+				return !e->isAlive();
+			})
 		, e.second.end());
 	}
 }

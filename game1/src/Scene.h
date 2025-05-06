@@ -33,6 +33,7 @@ private:
 	void spawnPlayer();
 	void spawnEnemy();
 	void spawnBullet();
+	void displayEntityInfoOnGui(const std::shared_ptr<Entity> e);
 
 	void sMovement();
 	void sUserInput();
