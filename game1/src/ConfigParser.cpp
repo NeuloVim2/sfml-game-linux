@@ -85,7 +85,6 @@ void ConfigParser::parse(const std::string& path)
 			m_configFile >> m_bullet.lifespan;
 		}
 	}
-	std::cout << "some text " << std::endl;
 }
 
 const ConfigParser::Window& ConfigParser::window() const

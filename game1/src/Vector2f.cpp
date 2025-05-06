@@ -52,7 +52,6 @@ Vector2f Vector2f::operator*(const float scalar) {
     Vector2f temp;
     temp.x = x * scalar;
     temp.y = y * scalar;
-    std::cout << "temp.x: " << temp.x << ", temp.y: " << temp.y << std::endl;
     return temp;
 };
 
