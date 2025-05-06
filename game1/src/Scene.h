@@ -26,6 +26,7 @@ private:
 	sf::RenderWindow& m_window;
 	EntityManager& m_entities;
 	ConfigParser& m_config;
+	int m_spawnRate;
 
 	bool m_paused{ false };
 	bool m_running { false };

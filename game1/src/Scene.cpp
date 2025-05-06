@@ -156,43 +156,45 @@ void Scene::spawnBullet()
 
 void Scene::sMovement()
 {
-    for (auto e : m_entities.getEntitiesByTag("player"))
+    if (m_entities.getEntitiesByTag("player").size() > 0)
     {
-        auto playerRadius = m_config.player().shapeConfig.shapeRadius;
+        for (auto e : m_entities.getEntitiesByTag("player"))
+        {
+            auto playerRadius = m_config.player().shapeConfig.shapeRadius;
 
-        if (e->get<CInput>().up && e->get<CTransform>().pos.y - playerRadius > 0)
-            //e->get<CTransform>().pos.y = e->get<CTransform>().pos.y - m_config.player().speed;
-            e->get<CTransform>().vel -= Vector2f{ 0.0f, 1.0f };
+            if (e->get<CInput>().up && e->get<CTransform>().pos.y - playerRadius > 0)
+                //e->get<CTransform>().pos.y = e->get<CTransform>().pos.y - m_config.player().speed;
+                e->get<CTransform>().vel -= Vector2f{ 0.0f, 1.0f };
 
-        if (e->get<CInput>().down && m_config.window().height - (e->get<CTransform>().pos.y + playerRadius) >= 0)
-            //e->get<CTransform>().pos.y = e->get<CTransform>().pos.y + m_config.player().speed;
-            e->get<CTransform>().vel += Vector2f{ 0.0f, 1.0f };
+            if (e->get<CInput>().down && m_config.window().height - (e->get<CTransform>().pos.y + playerRadius) >= 0)
+                //e->get<CTransform>().pos.y = e->get<CTransform>().pos.y + m_config.player().speed;
+                e->get<CTransform>().vel += Vector2f{ 0.0f, 1.0f };
 
-        if (e->get<CInput>().right && e->get<CTransform>().pos.x < (m_config.window().width - playerRadius))
-            //e->get<CTransform>().pos.x = e->get<CTransform>().pos.x + m_config.player().speed;
-            e->get<CTransform>().vel += Vector2f{ 1.0f, 0.0f };
+            if (e->get<CInput>().right && e->get<CTransform>().pos.x < (m_config.window().width - playerRadius))
+                //e->get<CTransform>().pos.x = e->get<CTransform>().pos.x + m_config.player().speed;
+                e->get<CTransform>().vel += Vector2f{ 1.0f, 0.0f };
 
-        if (e->get<CInput>().left && e->get<CTransform>().pos.x - playerRadius > 0)
-            //e->get<CTransform>().pos.x = e->get<CTransform>().pos.x - m_config.player().speed;
-            e->get<CTransform>().vel -= Vector2f{ 1.0f, 0.0f };
+            if (e->get<CInput>().left && e->get<CTransform>().pos.x - playerRadius > 0)
+                //e->get<CTransform>().pos.x = e->get<CTransform>().pos.x - m_config.player().speed;
+                e->get<CTransform>().vel -= Vector2f{ 1.0f, 0.0f };
 
 
-        // calcualate velocity vector x and y when moving at 45(W-D, W-A, etc.) angle
-        // cos(45) and sin(45) are 0.70710678118
-        float finalSpeed = m_config.player().speed;
-        if (e->get<CTransform>().vel.x != 0 && e->get<CTransform>().vel.y)
-            finalSpeed = m_config.player().speed * 0.70710678118;
+            // calcualate velocity vector x and y when moving at 45(W-D, W-A, etc.) angle
+            // cos(45) and sin(45) are 0.70710678118
+            float finalSpeed = m_config.player().speed;
+            if (e->get<CTransform>().vel.x != 0 && e->get<CTransform>().vel.y)
+                finalSpeed = m_config.player().speed * 0.70710678118;
 
-        e->get<CTransform>().pos += e->get<CTransform>().vel * finalSpeed;
-		e->get<CShape>().circle.setPosition(e->get<CTransform>().pos);
+            e->get<CTransform>().pos += e->get<CTransform>().vel * finalSpeed;
+            e->get<CShape>().circle.setPosition(e->get<CTransform>().pos);
 
-        e->get<CTransform>().angle += 0.01f;
-        e->get<CShape>().circle.setRotation(sf::radians(e->get<CTransform>().angle));
+            e->get<CTransform>().angle += 0.01f;
+            e->get<CShape>().circle.setRotation(sf::radians(e->get<CTransform>().angle));
 
-        // reset velocity
-        e->get<CTransform>().vel = Vector2f( 0.0f, 0.0f );
+            // reset velocity
+            e->get<CTransform>().vel = Vector2f(0.0f, 0.0f);
+        }
     }
-
     for(auto e : m_entities.getEntitiesByTag("bullet"))
     {
         e->get<CTransform>().pos += e->get<CTransform>().vel;
@@ -204,7 +206,9 @@ void Scene::sMovement()
 
 void Scene::sUserInput()
 { 
-    auto player = m_entities.getEntitiesByTag("player")[0];
+    std::shared_ptr<Entity> player = nullptr;
+    if(m_entities.getEntitiesByTag("player").size() > 0)
+        player = m_entities.getEntitiesByTag("player")[0];
 
 	while (const std::optional event = m_window.pollEvent()) {
 		ImGui::SFML::ProcessEvent(m_window, *event);
@@ -217,25 +221,31 @@ void Scene::sUserInput()
 
             if (keyPressed->scancode == sf::Keyboard::Scan::Escape)
 			    m_window.close();
-            if (keyPressed->scancode == sf::Keyboard::Scan::W)
-                player->get<CInput>().up = true;
-            if (keyPressed->scancode == sf::Keyboard::Scan::S)
-                player->get<CInput>().down = true;
-            if (keyPressed->scancode == sf::Keyboard::Scan::A)
-                player->get<CInput>().left = true;
-            if (keyPressed->scancode == sf::Keyboard::Scan::D)
-                player->get<CInput>().right = true;
+            if (player != nullptr)
+            {
+                if (keyPressed->scancode == sf::Keyboard::Scan::W)
+                    player->get<CInput>().up = true;
+                if (keyPressed->scancode == sf::Keyboard::Scan::S)
+                    player->get<CInput>().down = true;
+                if (keyPressed->scancode == sf::Keyboard::Scan::A)
+                    player->get<CInput>().left = true;
+                if (keyPressed->scancode == sf::Keyboard::Scan::D)
+                    player->get<CInput>().right = true;
+            }
         }
         if (const auto* keyReleased = event->getIf<sf::Event::KeyReleased>()) 
         {
-            if (keyReleased->scancode == sf::Keyboard::Scan::W)
-                player->get<CInput>().up = false;
-            if (keyReleased->scancode == sf::Keyboard::Scan::S)
-                player->get<CInput>().down = false;
-            if (keyReleased->scancode == sf::Keyboard::Scan::A)
-                player->get<CInput>().left = false;
-            if (keyReleased->scancode == sf::Keyboard::Scan::D)
-                player->get<CInput>().right = false;
+            if (player != nullptr)
+            {
+                if (keyReleased->scancode == sf::Keyboard::Scan::W)
+                    player->get<CInput>().up = false;
+                if (keyReleased->scancode == sf::Keyboard::Scan::S)
+                    player->get<CInput>().down = false;
+                if (keyReleased->scancode == sf::Keyboard::Scan::A)
+                    player->get<CInput>().left = false;
+                if (keyReleased->scancode == sf::Keyboard::Scan::D)
+                    player->get<CInput>().right = false;
+            }
 
         }
         if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())
@@ -243,16 +253,22 @@ void Scene::sUserInput()
             if (io.WantCaptureMouse)
                 return;
 
-            if (mouseButtonPressed->button == sf::Mouse::Button::Left)
+            if (player != nullptr)
             {
-                player->get<CInput>().shoot = true;
+                if (mouseButtonPressed->button == sf::Mouse::Button::Left)
+                {
+                    player->get<CInput>().shoot = true;
+                }
             }
         }
         if (const auto* mouseButtonReleased = event->getIf<sf::Event::MouseButtonReleased>())
         {
-            if (mouseButtonReleased->button == sf::Mouse::Button::Left)
+            if (player != nullptr)
             {
-                player->get<CInput>().shoot = false;
+                if (mouseButtonReleased->button == sf::Mouse::Button::Left)
+                {
+                    player->get<CInput>().shoot = false;
+                }
             }
         }
 		if (event->is<sf::Event::Closed>()) {
@@ -271,12 +287,15 @@ void Scene::sEnemySpawner(int& framePassed)
     }
 }
 
-void Scene::sBulletSpawner() 
+void Scene::sBulletSpawner()
 {
-    auto player = m_entities.getEntitiesByTag("player")[0];
-
-    if (player->get<CInput>().shoot)
-        spawnBullet();
+    std::shared_ptr<Entity> player = nullptr;
+    if (m_entities.getEntitiesByTag("player").size() > 0)
+    {
+	    player = m_entities.getEntitiesByTag("player")[0];
+		if (player->get<CInput>().shoot)
+			spawnBullet();
+    }
 }
 
 void Scene::displayEntityInfoOnGui(const std::shared_ptr<Entity> e)
@@ -332,10 +351,12 @@ void Scene::sGUI()
         {
             if (ImGui::CollapsingHeader("player"))
             {
-                for (auto e : m_entities.getEntitiesByTag("player"))
-                {
-                    displayEntityInfoOnGui(e);
-                }
+                if(m_entities.getEntitiesByTag("player").size() != 0)
+					for (auto e : m_entities.getEntitiesByTag("player"))
+					{
+						if(e != nullptr)
+							displayEntityInfoOnGui(e);
+					}
             }
             if (ImGui::CollapsingHeader("enemy"))
             {
@@ -384,11 +405,11 @@ void Scene::sRender(sf::Text& text)
 
     if (m_renderSystemEnabled)
     {
-    for (auto e : m_entities.getEntities())
-    {
-        m_window.draw(e->get<CShape>().circle);
-    }
-    m_window.draw(text);
+        for (auto e : m_entities.getEntities())
+        {
+            m_window.draw(e->get<CShape>().circle);
+        }
+        m_window.draw(text);
     }
 
     ImGui::SFML::Render(m_window);
@@ -459,15 +480,15 @@ void Scene::run()
 
         m_entities.update();
         if(m_inputSystemEnabled)
-        sUserInput();
+            sUserInput();
         if(m_bulletSpawnerSystemEnabled)
-        sBulletSpawner();
+            sBulletSpawner();
         if(m_movementSystemEnabled)
-        sMovement();
+            sMovement();
         if(m_enemySpawnerSystemEnabled)
-        sEnemySpawner(framePassed);
+            sEnemySpawner(framePassed);
         if(m_GUISystemEnabled)
-        sGUI();
+            sGUI();
 
         sRender(text);
 
