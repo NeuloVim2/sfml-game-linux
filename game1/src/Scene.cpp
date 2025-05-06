@@ -88,11 +88,24 @@ void Scene::spawnEnemy()
         0.0f
     );
 
+    float randomRedMax = m_config.enemy().shapeConfig.outlineColor[0];
+    float randomGreenMax = m_config.enemy().shapeConfig.outlineColor[1];
+    float randomBlueMax = m_config.enemy().shapeConfig.outlineColor[2];
+
+    auto randomRed = 0 + (rand() % (1 + (int)randomRedMax - 0)); 
+    auto randomGreen = 0 + (rand() % (1 + (int)randomGreenMax - 0)); 
+    auto randomBlue = 0 + (rand() % (1 + (int)randomBlueMax - 0)); 
+
+    enemyCShape.circle.setFillColor(sf::Color(randomRed,
+        randomGreen,
+        randomBlue));
+
     // Set up colors and border thickness
     enemyCShape.circle.setOutlineColor(sf::Color(
         m_config.enemy().shapeConfig.outlineColor[0],
         m_config.enemy().shapeConfig.outlineColor[1],
         m_config.enemy().shapeConfig.outlineColor[2]));
+
     enemyCShape.circle.setOutlineThickness(m_config.enemy().shapeConfig.outlineThickness);
 
     enemyCShape.circle.setPosition(sf::Vector2f(enemyCTransform.pos.x, enemyCTransform.pos.y));
@@ -140,6 +153,7 @@ void Scene::spawnBullet()
     bulletCShape.circle.setOutlineThickness(m_config.bullet().shapeConfig.outlineThickness);
     bulletCShape.circle.setPointCount(m_config.bullet().shapeVertices);
 }
+
 
 void Scene::sMovement()
 {
