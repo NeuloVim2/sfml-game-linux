@@ -264,7 +264,7 @@ void Scene::sUserInput()
 
 void Scene::sEnemySpawner(int& framePassed)
 {
-    if (framePassed >= 90)
+    if (framePassed == m_spawnRate)
     {
         spawnEnemy();
         framePassed = 0;
@@ -447,6 +447,7 @@ void Scene::run()
     spawnPlayer();
 
     int framePassed{};
+    m_spawnRate = m_config.enemy().smallInterval;
 
     sf::Clock clock;
     sf::Clock deltaClock;
@@ -467,6 +468,7 @@ void Scene::run()
         sEnemySpawner(framePassed);
         if(m_GUISystemEnabled)
         sGUI();
+
         sRender(text);
 
         ++framePassed;
