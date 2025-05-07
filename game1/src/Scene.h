@@ -32,6 +32,7 @@ private:
 	bool m_running { false };
 
 	bool m_movementSystemEnabled{ true };
+	bool m_bulletMovementEnabled{ true };
 	bool m_inputSystemEnabled{ true };
 	bool m_colisionSystemEnabled{ true };
 	bool m_enemySpawnerSystemEnabled{ true };

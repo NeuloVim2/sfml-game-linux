@@ -138,9 +138,9 @@ void Scene::spawnBullet()
     Vector2f normilizedDifferanceVector { differanceVector.x / differanceVectorLength, differanceVector.y / differanceVectorLength };
 
     bulletCTransform.vel = Vector2f(normilizedDifferanceVector.x * m_config.bullet().speed, normilizedDifferanceVector.y * m_config.bullet().speed);
-    bulletCTransform.pos += bulletCTransform.vel;
 
     bulletCShape.circle.setPosition(bulletCTransform.pos);
+    bulletCShape.circle.setOrigin(Vector2f{ bulletCShape.circle.getRadius(),  bulletCShape.circle.getRadius()});
     bulletCShape.circle.setOutlineColor(sf::Color(
         m_config.bullet().shapeConfig.outlineColor[0],
         m_config.bullet().shapeConfig.outlineColor[1],
@@ -163,19 +163,15 @@ void Scene::sMovement()
             auto playerRadius = m_config.player().shapeConfig.shapeRadius;
 
             if (e->get<CInput>().up && e->get<CTransform>().pos.y - playerRadius > 0)
-                //e->get<CTransform>().pos.y = e->get<CTransform>().pos.y - m_config.player().speed;
                 e->get<CTransform>().vel -= Vector2f{ 0.0f, 1.0f };
 
             if (e->get<CInput>().down && m_config.window().height - (e->get<CTransform>().pos.y + playerRadius) >= 0)
-                //e->get<CTransform>().pos.y = e->get<CTransform>().pos.y + m_config.player().speed;
                 e->get<CTransform>().vel += Vector2f{ 0.0f, 1.0f };
 
             if (e->get<CInput>().right && e->get<CTransform>().pos.x < (m_config.window().width - playerRadius))
-                //e->get<CTransform>().pos.x = e->get<CTransform>().pos.x + m_config.player().speed;
                 e->get<CTransform>().vel += Vector2f{ 1.0f, 0.0f };
 
             if (e->get<CInput>().left && e->get<CTransform>().pos.x - playerRadius > 0)
-                //e->get<CTransform>().pos.x = e->get<CTransform>().pos.x - m_config.player().speed;
                 e->get<CTransform>().vel -= Vector2f{ 1.0f, 0.0f };
 
 
@@ -188,20 +184,18 @@ void Scene::sMovement()
             e->get<CTransform>().pos += e->get<CTransform>().vel * finalSpeed;
             e->get<CShape>().circle.setPosition(e->get<CTransform>().pos);
 
-            e->get<CTransform>().angle += 0.01f;
-            e->get<CShape>().circle.setRotation(sf::radians(e->get<CTransform>().angle));
-
             // reset velocity
             e->get<CTransform>().vel = Vector2f(0.0f, 0.0f);
         }
     }
-    for(auto e : m_entities.getEntitiesByTag("bullet"))
-    {
-        e->get<CTransform>().pos += e->get<CTransform>().vel;
-        e->get<CShape>().circle.setPosition(
-				e->get<CTransform>().pos
-        );
-    }
+    if(m_bulletMovementEnabled)
+		for(auto e : m_entities.getEntitiesByTag("bullet"))
+		{
+			e->get<CTransform>().pos += e->get<CTransform>().vel;
+			e->get<CShape>().circle.setPosition(
+					e->get<CTransform>().pos
+			);
+		}
 }
 
 void Scene::sUserInput()
@@ -333,7 +327,12 @@ void Scene::sGUI()
     {
         if (ImGui::BeginTabItem("Systems"))
         {
-            ImGui::Checkbox("On/Off Movement System", &m_movementSystemEnabled);
+
+            ImGui::SeparatorText("Movement systems");
+            ImGui::Checkbox("On/Off Movement System for ALL", &m_movementSystemEnabled);
+            ImGui::Checkbox("On/Off Movement System for BULLETS", &m_bulletMovementEnabled);
+
+            ImGui::SeparatorText("Other");
             ImGui::Checkbox("On/Off Colision System", &m_colisionSystemEnabled);
 
             ImGui::Checkbox("On/Off Enymy Spawn System", &m_enemySpawnerSystemEnabled);
@@ -385,17 +384,6 @@ void Scene::sGUI()
         }
         ImGui::EndTabBar();
     }
-	//ImGui::Checkbox("Draw Circle", &drawCircle);
-	//ImGui::SameLine();
-	//ImGui::Checkbox("Draw Text", &drawText);
-	//ImGui::SliderFloat("Radius", &radius, 0.0f, 300.0f);
-	//ImGui::SliderInt("Sides", &pointCount, 3, 64);
-	//ImGui::ColorEdit3("Color Circle", c);
-	//ImGui::InputText("Text", displayString, 255);
-	//if (ImGui::Button("Set Text"))
-	//text.setString(displayString);
-	//ImGui::SameLine();
-	//if (ImGui::Button("Reset Circle"))
 
     ImGui::End();
 }
@@ -421,32 +409,6 @@ void Scene::sRender(sf::Text& text)
 
 void Scene::run()
 {
-  /*  auto player = m_entities.addEntity("player1");
-    player->add<CTransform>(Vector2f {3.3f, 4.5f}, Vector2f {11.3f, 3.5f}, Vector2f {2.0f, 2.0f}, 30.0f);
-
-    auto e = m_entities.addEntity("test");
-    e->add<CTransform>(Vector2f {2.3f, 10.5f}, Vector2f {11.3f, 3.5f}, Vector2f {2.0f, 2.0f}, 30.0f);
-
-    m_entities.update();
-
-    for (auto e : m_entities.getEntities()) {
-        std::cout << e->id() << " : " << e->tag() << std::endl;
-    }
-
-    std::cout << "Scene::run() : " << "m_window (" << &m_window << ")" << std::endl;
-    sf::Clock deltaClock;
-
-    float c[3] = {1.0f, 2.0f, 0.0f};
-
-    float radius = 50.0f;
-    int pointCount = 30;
-    float circleSpeedX = 1.0f;
-    float circleSpeedY = 0.5f;
-    char displayString[255]  = "Sample Text";
-
-    bool drawCircle = true;
-    bool drawText = true;*/
-
     sf::Font font;
 
     std::cout << "Executable absolute path is " << std::filesystem::current_path() << std::endl;
@@ -462,11 +424,6 @@ void Scene::run()
     text.setFillColor(sf::Color(m_config.font().rgb[0], m_config.font().rgb[1], m_config.font().rgb[2]));
 
     text.setPosition(sf::Vector2f(10.0f, 0.0f + (float)text.getCharacterSize()));
-
-	//sf::CircleShape circle(radius, pointCount);
-
-	//circle.setFillColor(sf::Color(std::uint8_t(c[0] * 255), std::uint8_t(c[1] * 255), std::uint8_t(c[2] * 255)));
- //   circle.setPosition(sf::Vector2f(10.0f, 10.0f));
 
     spawnPlayer();
 
@@ -484,10 +441,10 @@ void Scene::run()
         m_entities.update();
         if(m_inputSystemEnabled)
             sUserInput();
-        if(m_bulletSpawnerSystemEnabled)
-            sBulletSpawner();
         if(m_movementSystemEnabled)
             sMovement();
+        if(m_bulletSpawnerSystemEnabled)
+            sBulletSpawner();
         if(m_enemySpawnerSystemEnabled)
             sEnemySpawner(framePassed);
         if(m_GUISystemEnabled)
