@@ -408,6 +408,8 @@ void Scene::sRender(sf::Text& text)
     {
         for (auto e : m_entities.getEntities())
         {
+            e->get<CTransform>().angle += 0.01f;
+            e->get<CShape>().circle.setRotation(sf::radians(e->get<CTransform>().angle));
             m_window.draw(e->get<CShape>().circle);
         }
         m_window.draw(text);
