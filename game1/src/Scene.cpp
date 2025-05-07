@@ -27,7 +27,7 @@ void Scene::spawnPlayer()
     auto player = m_entities.addEntity("player");
     auto& playerCTransform = player->add<CTransform>(
         Vector2f {static_cast<float>(m_config.window().width/ 2), static_cast<float>(m_config.window().height / 2)},
-        Vector2f {11.3f, 3.5f}, 
+        Vector2f {0.0f, 0.0f}, 
         Vector2f {2.0f, 2.0f}, 
         0.0f
     );
@@ -182,7 +182,7 @@ void Scene::sMovement()
             // calcualate velocity vector x and y when moving at 45(W-D, W-A, etc.) angle
             // cos(45) and sin(45) are 0.70710678118
             float finalSpeed = m_config.player().speed;
-            if (e->get<CTransform>().vel.x != 0 && e->get<CTransform>().vel.y)
+            if (abs(e->get<CTransform>().vel.x) == 1.0f && abs(e->get<CTransform>().vel.y) == 1.0f)
                 finalSpeed = m_config.player().speed * 0.70710678118;
 
             e->get<CTransform>().pos += e->get<CTransform>().vel * finalSpeed;
