@@ -295,6 +295,7 @@ void Scene::sBulletSpawner()
 	    player = m_entities.getEntitiesByTag("player")[0];
 		if (player->get<CInput>().shoot)
 			spawnBullet();
+        player->get<CInput>().shoot = false;
     }
 }
 
