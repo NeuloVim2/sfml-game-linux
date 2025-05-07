@@ -49,6 +49,7 @@ private:
 	void sUserInput();
 	void sEnemySpawner(int& framePassed);
 	void sBulletSpawner();
+	void sLifespan();
 	void sCollision();
 	void sGUI();
 	void sRender(sf::Text&);

@@ -128,6 +128,10 @@ void Scene::spawnBullet()
         Vector2f{ m_config.bullet().speed, m_config.bullet().speed },
         Vector2f{ 0.0f, 0.0f },
         0.0f);
+    bullet->add<CLifespan>(
+        m_config.bullet().lifespan,
+        m_config.bullet().lifespan
+    );
 
     sf::Vector2i mousePos = sf::Mouse::getPosition(m_window);
     Vector2f differanceVector = Vector2f(
@@ -153,9 +157,42 @@ void Scene::spawnBullet()
     bulletCShape.circle.setPointCount(m_config.bullet().shapeVertices);
 }
 
+void Scene::displayEntityInfoOnGui(const std::shared_ptr<Entity> e)
+{
+    float c[3]{
+		 e->get<CShape>().circle.getFillColor().r / (float)255,
+		 e->get<CShape>().circle.getFillColor().g / (float)255,
+		 e->get<CShape>().circle.getFillColor().b / (float)255
+    };
 
+    ImGui::PushID(e->id());
+    ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(c[0], c[1], c[2]));
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(c[0], c[1] - 0.1, c[2] + 0.01));
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(c[0], c[1], c[2]));
+    if (ImGui::Button("D"))
+        e->destroy();
+	ImGui::PopStyleColor(3);
+	ImGui::PopID();
+	ImGui::SameLine();
+	ImGui::Text(std::to_string(e->id()).c_str());
+	ImGui::SameLine();
+	ImGui::Text(e->tag().c_str());
+	ImGui::SameLine();
+	ImGui::Text(("( " + std::to_string(e->get<CTransform>().pos.x) + " " + std::to_string(e->get<CTransform>().pos.y) + " )").c_str());
+}
+
+// Systems
 void Scene::sMovement()
 {
+    if(m_bulletMovementEnabled)
+		for(auto e : m_entities.getEntitiesByTag("bullet"))
+		{
+			e->get<CTransform>().pos += e->get<CTransform>().vel;
+			e->get<CShape>().circle.setPosition(
+					e->get<CTransform>().pos
+			);
+		}
+
     if (m_entities.getEntitiesByTag("player").size() > 0)
     {
         for (auto e : m_entities.getEntitiesByTag("player"))
@@ -188,14 +225,36 @@ void Scene::sMovement()
             e->get<CTransform>().vel = Vector2f(0.0f, 0.0f);
         }
     }
-    if(m_bulletMovementEnabled)
-		for(auto e : m_entities.getEntitiesByTag("bullet"))
-		{
-			e->get<CTransform>().pos += e->get<CTransform>().vel;
-			e->get<CShape>().circle.setPosition(
-					e->get<CTransform>().pos
-			);
-		}
+}
+
+void Scene::sLifespan()
+{
+    for (auto e : m_entities.getEntitiesByTag("bullet"))
+    {
+        auto alpha = e->get<CShape>().circle.getFillColor().a - round((int)e->get<CShape>().circle.getFillColor().a / e->get<CLifespan>().lifespamRemaining);
+        std::cout << (int) alpha << std::endl;
+		 e->get<CShape>().circle.setFillColor(
+			sf::Color(
+				e->get<CShape>().circle.getFillColor().r,
+				e->get<CShape>().circle.getFillColor().g,
+				e->get<CShape>().circle.getFillColor().b,
+				(uint8_t) alpha
+			)
+         );
+		 e->get<CShape>().circle.setOutlineColor(
+			sf::Color(
+				e->get<CShape>().circle.getFillColor().r,
+				e->get<CShape>().circle.getFillColor().g,
+				e->get<CShape>().circle.getFillColor().b,
+				(uint8_t) alpha
+			)
+         );
+
+        e->get<CLifespan>().lifespamRemaining -= 1.0f;
+        std::cout << "remaining lifespan " << e->get<CLifespan>().lifespamRemaining << std::endl;
+        if (e->get<CLifespan>().lifespamRemaining <= 0)
+            e->destroy();
+    }
 }
 
 void Scene::sUserInput()
@@ -292,31 +351,6 @@ void Scene::sBulletSpawner()
         player->get<CInput>().shoot = false;
     }
 }
-
-void Scene::displayEntityInfoOnGui(const std::shared_ptr<Entity> e)
-{
-    float c[3]{
-		 e->get<CShape>().circle.getFillColor().r / (float)255,
-		 e->get<CShape>().circle.getFillColor().g / (float)255,
-		 e->get<CShape>().circle.getFillColor().b / (float)255
-    };
-
-    ImGui::PushID(e->id());
-    ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(c[0], c[1], c[2]));
-    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(c[0], c[1] - 0.1, c[2] + 0.01));
-    ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(c[0], c[1], c[2]));
-    if (ImGui::Button("D"))
-        e->destroy();
-	ImGui::PopStyleColor(3);
-	ImGui::PopID();
-	ImGui::SameLine();
-	ImGui::Text(std::to_string(e->id()).c_str());
-	ImGui::SameLine();
-	ImGui::Text(e->tag().c_str());
-	ImGui::SameLine();
-	ImGui::Text(("( " + std::to_string(e->get<CTransform>().pos.x) + " " + std::to_string(e->get<CTransform>().pos.y) + " )").c_str());
-}
-
 
 void Scene::sGUI()
 {
@@ -447,9 +481,9 @@ void Scene::run()
             sBulletSpawner();
         if(m_enemySpawnerSystemEnabled)
             sEnemySpawner(framePassed);
+        sLifespan();
         if(m_GUISystemEnabled)
             sGUI();
-
         sRender(text);
 
         ++framePassed;

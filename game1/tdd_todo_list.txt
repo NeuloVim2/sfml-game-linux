@@ -28,8 +28,11 @@ toggle on/off on GUI working system; separate tab - done
 decrease rate of bullets fire for player - done
 fix issue when bullet generated not from outter border of player - done
 fix issue when bullet velocity increase/decrease with players movement ?
+fade away spawned bullet when its slowly reaching its lifespan end - done
 
-fade away spawned bullet when its slowly reaching its lifespan end
+add enemy movement
+enemy bounce off the screen edges
+
 add lifspan to enemy entities
 
 display on GUI fps?

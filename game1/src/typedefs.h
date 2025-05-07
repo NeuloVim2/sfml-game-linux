@@ -14,5 +14,6 @@ using ComponentTuple = std::tuple<
 	CCollision,
 	CScore,
 	CShape,
-	CInput
+	CInput,
+	CLifespan
 >;
