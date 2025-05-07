@@ -76,6 +76,9 @@ void Scene::spawnEnemy()
     float randomY = minY + (rand() % (1 + (int)maxY - (int)minY));
     float randomPointCount = minVertices + (rand() % (1 + (int)maxVertices - (int)minVertices));
 
+    float randomSpeedX = (m_config.enemy().minSpeed * -1) + (rand() % (1 + (int)m_config.enemy().maxSpeed - ((int)m_config.enemy().minSpeed * -1)));
+    float randomSpeedY = (m_config.enemy().minSpeed * -1) + (rand() % (1 + (int)m_config.enemy().maxSpeed - ((int)m_config.enemy().minSpeed * -1)));
+
     auto enemy = m_entities.addEntity("enemy");
     auto& enemyCShape = enemy->add<CShape>(sf::CircleShape{
         static_cast<float> (m_config.enemy().shapeConfig.shapeRadius),
@@ -84,7 +87,7 @@ void Scene::spawnEnemy()
 
     auto& enemyCTransform = enemy->add<CTransform>(
         Vector2f {static_cast<float>(randomX), static_cast<float>(randomY)},
-        Vector2f {m_config.enemy().maxSpeed, m_config.enemy().maxSpeed},
+        Vector2f {randomSpeedX, randomSpeedY},
         Vector2f {0.0f, 0.0f}, 
         0.0f
     );
@@ -138,7 +141,7 @@ void Scene::spawnBullet()
         (float)mousePos.x - playerPos.x, 
         (float)mousePos.y - playerPos.y);
 
-    float differanceVectorLength = sqrt((differanceVector.x * differanceVector.x) + (differanceVector.y * differanceVector.y));
+    float differanceVectorLength = sqrtf((differanceVector.x * differanceVector.x) + (differanceVector.y * differanceVector.y));
     Vector2f normilizedDifferanceVector { differanceVector.x / differanceVectorLength, differanceVector.y / differanceVectorLength };
 
     bulletCTransform.vel = Vector2f(normilizedDifferanceVector.x * m_config.bullet().speed, normilizedDifferanceVector.y * m_config.bullet().speed);
@@ -193,6 +196,26 @@ void Scene::sMovement()
 			);
 		}
 
+    for (auto e : m_entities.getEntitiesByTag("enemy"))
+    {
+        auto enemyRadius = e->get<CShape>().circle.getRadius();
+
+        bool isTopBorder = e->get<CTransform>().pos.y - enemyRadius < 0;
+        bool isBottomBorder = e->get<CTransform>().pos.y + enemyRadius >= m_config.window().height;
+        bool isRightBorder = e->get<CTransform>().pos.x + enemyRadius >= m_config.window().width;
+        bool isLeftBorder = e->get<CTransform>().pos.x - enemyRadius < 0;
+
+        if (isTopBorder || isBottomBorder)
+            e->get<CTransform>().vel.y *= -1.0f;
+        if (isRightBorder || isLeftBorder)
+            e->get<CTransform>().vel.x *= -1.0f;
+
+        e->get<CTransform>().pos += e->get<CTransform>().vel;
+        e->get<CShape>().circle.setPosition(
+            e->get<CTransform>().pos
+        );
+    }
+
     if (m_entities.getEntitiesByTag("player").size() > 0)
     {
         for (auto e : m_entities.getEntitiesByTag("player"))
@@ -232,7 +255,6 @@ void Scene::sLifespan()
     for (auto e : m_entities.getEntitiesByTag("bullet"))
     {
         auto alpha = e->get<CShape>().circle.getFillColor().a - round((int)e->get<CShape>().circle.getFillColor().a / e->get<CLifespan>().lifespamRemaining);
-        std::cout << (int) alpha << std::endl;
 		 e->get<CShape>().circle.setFillColor(
 			sf::Color(
 				e->get<CShape>().circle.getFillColor().r,
@@ -251,7 +273,6 @@ void Scene::sLifespan()
          );
 
         e->get<CLifespan>().lifespamRemaining -= 1.0f;
-        std::cout << "remaining lifespan " << e->get<CLifespan>().lifespamRemaining << std::endl;
         if (e->get<CLifespan>().lifespamRemaining <= 0)
             e->destroy();
     }
@@ -430,7 +451,7 @@ void Scene::sRender(sf::Text& text)
     {
         for (auto e : m_entities.getEntities())
         {
-            e->get<CTransform>().angle += 0.01f;
+            e->get<CTransform>().angle += 0.04f;
             e->get<CShape>().circle.setRotation(sf::radians(e->get<CTransform>().angle));
             m_window.draw(e->get<CShape>().circle);
         }
