@@ -347,6 +347,26 @@ void Scene::sUserInput()
 
             if (keyPressed->scancode == sf::Keyboard::Scan::Escape)
 			    m_window.close();
+            if (keyPressed->scancode == sf::Keyboard::Scan::P)
+            {
+                std::cout << " m_running before: " << m_running << " m_paused before: " << m_paused << std::endl;
+                if (m_running && !m_paused)
+                {
+                    std::cout << "IN IFFF!!!!!!!!!!!!" << std::endl;
+                    m_paused = true;
+                    m_running = false;
+                } 
+                else
+                {
+                    this->m_running = true;
+                    this->m_paused = false;
+                }
+
+                std::cout << "P is pressed" << " m_running after: " << m_running << " m_paused after: " << m_paused << std::endl;
+                std::cout << "m_running && !m_paused is " << (m_running && !m_paused) << std::endl;
+                std::cout << "m_movementSystemEnabled && (!m_paused && m_running) is " << (m_movementSystemEnabled && (!m_paused && m_running)) << std::endl;
+
+            }
             if (player != nullptr)
             {
                 if (keyPressed->scancode == sf::Keyboard::Scan::W)
@@ -627,26 +647,24 @@ void Scene::run()
         score.setString(std::to_string((int)m_scoreTotal));
         ImGui::SFML::Update(m_window, deltaClock.restart());
 
-        if (!m_paused)
-        {
-            m_entities.update();
-            if (m_inputSystemEnabled)
-                sUserInput();
-            if (m_movementSystemEnabled)
-                sMovement();
-            if (m_bulletSpawnerSystemEnabled)
-                sBulletSpawner();
-            if (m_enemySpawnerSystemEnabled)
-                sEnemySpawner(framePassed);
-            sLifespan();
-            if (m_colisionSystemEnabled)
-                sCollision();
-            sScore();
-            if (m_GUISystemEnabled)
-                sGUI();
-            sRender(text, score);
+		m_entities.update();
+		if (m_inputSystemEnabled)
+			sUserInput();
+		if (m_movementSystemEnabled && (!m_paused && m_running))
+			sMovement();
+		if (m_bulletSpawnerSystemEnabled && (!m_paused && m_running))
+			sBulletSpawner();
+		if (m_enemySpawnerSystemEnabled && (!m_paused && m_running))
+			sEnemySpawner(framePassed);
+		sLifespan();
+		if (m_colisionSystemEnabled && (!m_paused && m_running))
+			sCollision();
+		sScore();
+		if (m_GUISystemEnabled)
+			sGUI();
+		sRender(text, score);
 
-            ++framePassed;
-        }
+		if (m_enemySpawnerSystemEnabled && (!m_paused && m_running))
+		    ++framePassed;
      }
 };

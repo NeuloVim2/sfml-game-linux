@@ -30,7 +30,7 @@ private:
 	float m_scoreTotal{ 0 };
 
 	bool m_paused{ false };
-	bool m_running { false };
+	bool m_running { true };
 
 	bool m_movementSystemEnabled{ true };
 	bool m_bulletMovementEnabled{ true };
