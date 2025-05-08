@@ -26,7 +26,8 @@ private:
 	sf::RenderWindow& m_window;
 	EntityManager& m_entities;
 	ConfigParser& m_config;
-	int m_spawnRate;
+	int m_spawnRate{ 60 };
+	float m_scoreTotal{ 0 };
 
 	bool m_paused{ false };
 	bool m_running { false };
@@ -52,8 +53,9 @@ private:
 	void sBulletSpawner();
 	void sLifespan();
 	void sCollision();
+	void sScore();
 	void sGUI();
-	void sRender(sf::Text&);
+	void sRender(sf::Text&, sf::Text&);
 
 public:
 	Scene(Type sceneType, sf::RenderWindow& window, EntityManager& eM, ConfigParser& config)

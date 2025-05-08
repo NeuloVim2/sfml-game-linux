@@ -93,6 +93,7 @@ void Scene::spawnEnemy()
     );
 
     enemy->add<CCollision>(m_config.enemy().shapeConfig.collisionRadius);
+    enemy->add<CScore>(20.0f);
 
     float randomRedMax = m_config.enemy().shapeConfig.outlineColor[0];
     float randomGreenMax = m_config.enemy().shapeConfig.outlineColor[1];
@@ -141,6 +142,7 @@ void Scene::spawnEnemyFragments(std::shared_ptr<Entity> enemy)
 			});
 		fragment->add<CCollision>(m_config.enemy().shapeConfig.collisionRadius);
 		fragment->add<CLifespan>(m_config.enemy().smallLifespan, m_config.enemy().smallLifespan);
+        fragment->add<CScore>(5.0f);
 
 		fragmentCShape.circle.setFillColor(enemy->get<CShape>().circle.getFillColor());
 
@@ -423,6 +425,15 @@ void Scene::sBulletSpawner()
     }
 }
 
+void Scene::sScore()
+{
+    for (auto e : m_entities.getEntities())
+    {
+        if(!e->isAlive())
+            m_scoreTotal += e->get<CScore>().score;
+    }
+}
+
 void Scene::sCollision()
 {
     for (auto enemy : m_entities.getEntitiesByTag("enemy"))
@@ -440,6 +451,7 @@ void Scene::sCollision()
             {
                 spawnEnemyFragments(enemy);
                 enemy->destroy();
+                m_scoreTotal = 0.0f;
                 m_entities.getEntitiesByTag("player")[0]->destroy();
 
                 spawnPlayer();
@@ -527,6 +539,13 @@ void Scene::sGUI()
                     displayEntityInfoOnGui(e);
                 }
             }
+            if (ImGui::CollapsingHeader("enemy_fragment"))
+            {
+                for (auto e : m_entities.getEntitiesByTag("enemy_fragment"))
+                {
+                    displayEntityInfoOnGui(e);
+                }
+            }
             if (ImGui::CollapsingHeader("bullet"))
             {
                 for (auto e : m_entities.getEntitiesByTag("bullet"))
@@ -534,6 +553,7 @@ void Scene::sGUI()
                     displayEntityInfoOnGui(e);
                 }
             }
+
             if (ImGui::CollapsingHeader("all entites"))
             {
                 for (auto e : m_entities.getEntities())
@@ -550,7 +570,7 @@ void Scene::sGUI()
     ImGui::End();
 }
 
-void Scene::sRender(sf::Text& text)
+void Scene::sRender(sf::Text& text, sf::Text& score)
 {
     m_window.clear();
 
@@ -563,6 +583,7 @@ void Scene::sRender(sf::Text& text)
             m_window.draw(e->get<CShape>().circle);
         }
         m_window.draw(text);
+        m_window.draw(score);
     }
 
     ImGui::SFML::Render(m_window);
@@ -582,10 +603,15 @@ void Scene::run()
     };
 
    sf::Text text(font, "0", m_config.font().fontSize);
+   sf::Text score(font, "0", m_config.font().fontSize);
 
     text.setFillColor(sf::Color(m_config.font().rgb[0], m_config.font().rgb[1], m_config.font().rgb[2]));
 
     text.setPosition(sf::Vector2f(10.0f, 0.0f + (float)text.getCharacterSize()));
+
+    text.setFillColor(sf::Color(m_config.font().rgb[0], m_config.font().rgb[1], m_config.font().rgb[2]));
+
+    text.setPosition(sf::Vector2f(20.0f, 0.0f + (float)text.getCharacterSize()));
 
     spawnPlayer();
 
@@ -598,24 +624,29 @@ void Scene::run()
     srand(time(NULL));
     while (m_window.isOpen()) {
         text.setString(std::to_string((int)(1.0f / clock.restart().asSeconds())));
+        score.setString(std::to_string((int)m_scoreTotal));
         ImGui::SFML::Update(m_window, deltaClock.restart());
 
-        m_entities.update();
-        if(m_inputSystemEnabled)
-            sUserInput();
-        if(m_movementSystemEnabled)
-            sMovement();
-        if(m_bulletSpawnerSystemEnabled)
-            sBulletSpawner();
-        if(m_enemySpawnerSystemEnabled)
-            sEnemySpawner(framePassed);
-        sLifespan();
-        if(m_colisionSystemEnabled)
-            sCollision();
-        if(m_GUISystemEnabled)
-            sGUI();
-        sRender(text);
+        if (!m_paused)
+        {
+            m_entities.update();
+            if (m_inputSystemEnabled)
+                sUserInput();
+            if (m_movementSystemEnabled)
+                sMovement();
+            if (m_bulletSpawnerSystemEnabled)
+                sBulletSpawner();
+            if (m_enemySpawnerSystemEnabled)
+                sEnemySpawner(framePassed);
+            sLifespan();
+            if (m_colisionSystemEnabled)
+                sCollision();
+            sScore();
+            if (m_GUISystemEnabled)
+                sGUI();
+            sRender(text, score);
 
-        ++framePassed;
+            ++framePassed;
+        }
      }
 };
