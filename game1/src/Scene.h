@@ -28,6 +28,7 @@ private:
 	ConfigParser& m_config;
 	int m_spawnRate{ 60 };
 	float m_scoreTotal{ 0 };
+	float m_specialWeaponCooldown{ 0.0f };
 
 	bool m_paused{ false };
 	bool m_running { true };
@@ -45,12 +46,14 @@ private:
 	void spawnEnemy();
 	void spawnEnemyFragments(std::shared_ptr<Entity> enemy);
 	void spawnBullet();
+	void spawnSpecialBullet();
 	void displayEntityInfoOnGui(const std::shared_ptr<Entity> e);
 
 	void sMovement();
 	void sUserInput();
 	void sEnemySpawner(int& framePassed);
 	void sBulletSpawner();
+	void sSpecialWeapon();
 	void sLifespan();
 	void sCollision();
 	void sScore();

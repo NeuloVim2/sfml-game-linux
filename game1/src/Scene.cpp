@@ -206,6 +206,95 @@ void Scene::spawnBullet()
     bulletCShape.circle.setPointCount(m_config.bullet().shapeVertices);
 }
 
+void Scene::spawnSpecialBullet()
+{
+    auto specialBulletMain = m_entities.addEntity("special_bullet");
+    auto& specialBulletMainCShape = specialBulletMain->add<CShape>(sf::CircleShape{
+        5.0f,
+        static_cast<std::size_t> (m_config.bullet().shapeVertices)
+    });
+
+    auto& playerPos = m_entities.getEntitiesByTag("player")[0]->get<CTransform>().pos;
+
+    float speed = 20.0f;
+    auto& specialBulletMainCTransform = specialBulletMain->add<CTransform>(
+        Vector2f{ playerPos.x, playerPos.y },
+        Vector2f{ speed, speed },
+        Vector2f{ 0.0f, 0.0f },
+        0.0f);
+    specialBulletMain->add<CLifespan>(
+        m_config.bullet().lifespan,
+        m_config.bullet().lifespan
+    );
+
+    specialBulletMain->add<CCollision>(5);
+
+    sf::Vector2i mousePos = sf::Mouse::getPosition(m_window);
+    Vector2f differanceVector = Vector2f(
+        (float)mousePos.x - playerPos.x, 
+        (float)mousePos.y - playerPos.y);
+
+    float differanceVectorLength = sqrtf((differanceVector.x * differanceVector.x) + (differanceVector.y * differanceVector.y));
+    Vector2f normilizedDifferanceVector { differanceVector.x / differanceVectorLength, differanceVector.y / differanceVectorLength };
+
+    specialBulletMainCTransform.vel = Vector2f(normilizedDifferanceVector.x * speed, normilizedDifferanceVector.y * speed);
+
+    float angle = atan2f(specialBulletMainCTransform.vel.y, specialBulletMainCTransform.vel.x);
+
+    specialBulletMainCShape.circle.setPosition(specialBulletMainCTransform.pos);
+    specialBulletMainCShape.circle.setOrigin(Vector2f{ specialBulletMainCShape.circle.getRadius(),  specialBulletMainCShape.circle.getRadius()});
+    specialBulletMainCShape.circle.setOutlineColor(sf::Color(
+        m_config.bullet().shapeConfig.outlineColor[0],
+        m_config.bullet().shapeConfig.outlineColor[1],
+        m_config.bullet().shapeConfig.outlineColor[2]));
+    specialBulletMainCShape.circle.setFillColor(sf::Color(
+        m_config.bullet().shapeConfig.fillColor[0],
+        m_config.bullet().shapeConfig.fillColor[1],
+        m_config.bullet().shapeConfig.fillColor[2]));
+    specialBulletMainCShape.circle.setOutlineThickness(m_config.bullet().shapeConfig.outlineThickness);
+    specialBulletMainCShape.circle.setPointCount(m_config.bullet().shapeVertices);
+
+    for (int i = 0; i < 4; i++)
+    {
+		auto bullet = m_entities.addEntity("special_bullet");
+		auto& bulletCShape = bullet->add<CShape>(sf::CircleShape{
+			5.0f,
+			static_cast<std::size_t> (m_config.bullet().shapeVertices)
+		});
+
+		auto& playerPos = m_entities.getEntitiesByTag("player")[0]->get<CTransform>().pos;
+
+		float speed = 20.0f;
+		auto& bulletCTransform = bullet->add<CTransform>(
+			Vector2f{ playerPos.x, playerPos.y },
+			Vector2f{ speed, speed },
+			Vector2f{ 0.0f, 0.0f },
+			0.0f);
+		bullet->add<CLifespan>(
+			m_config.bullet().lifespan,
+			m_config.bullet().lifespan
+		);
+
+		bullet->add<CCollision>(5);
+
+        angle += 0.1f;
+		bulletCTransform.vel = Vector2f(cosf(angle) * speed, sinf(angle) * speed);
+
+		bulletCShape.circle.setPosition(bulletCTransform.pos);
+		bulletCShape.circle.setOrigin(Vector2f{ bulletCShape.circle.getRadius(),  bulletCShape.circle.getRadius()});
+		bulletCShape.circle.setOutlineColor(sf::Color(
+			m_config.bullet().shapeConfig.outlineColor[0],
+			m_config.bullet().shapeConfig.outlineColor[1],
+			m_config.bullet().shapeConfig.outlineColor[2]));
+		bulletCShape.circle.setFillColor(sf::Color(
+			m_config.bullet().shapeConfig.fillColor[0],
+			m_config.bullet().shapeConfig.fillColor[1],
+			m_config.bullet().shapeConfig.fillColor[2]));
+		bulletCShape.circle.setOutlineThickness(m_config.bullet().shapeConfig.outlineThickness);
+		bulletCShape.circle.setPointCount(m_config.bullet().shapeVertices);
+    }
+}
+
 void Scene::displayEntityInfoOnGui(const std::shared_ptr<Entity> e)
 {
     float c[3]{
@@ -233,14 +322,24 @@ void Scene::displayEntityInfoOnGui(const std::shared_ptr<Entity> e)
 // Systems
 void Scene::sMovement()
 {
-    if(m_bulletMovementEnabled)
-		for(auto e : m_entities.getEntitiesByTag("bullet"))
-		{
-			e->get<CTransform>().pos += e->get<CTransform>().vel;
-			e->get<CShape>().circle.setPosition(
-					e->get<CTransform>().pos
-			);
-		}
+    if (m_bulletMovementEnabled)
+    {
+        for (auto e : m_entities.getEntitiesByTag("bullet"))
+        {
+            e->get<CTransform>().pos += e->get<CTransform>().vel;
+            e->get<CShape>().circle.setPosition(
+                e->get<CTransform>().pos
+            );
+        }
+
+        for (auto e : m_entities.getEntitiesByTag("special_bullet"))
+        {
+            e->get<CTransform>().pos += e->get<CTransform>().vel;
+            e->get<CShape>().circle.setPosition(
+                e->get<CTransform>().pos
+            );
+        }
+    }
 
     for (auto e : m_entities.getEntities())
     {
@@ -303,7 +402,7 @@ void Scene::sLifespan()
 {
     for (auto e : m_entities.getEntities())
     {
-        if (e->tag() == "bullet" || e->tag() == "enemy_fragment")
+        if (e->tag() == "bullet" || e->tag() == "enemy_fragment" || e->tag() == "special_bullet")
         {
             auto alpha = e->get<CShape>().circle.getFillColor().a - round((int)e->get<CShape>().circle.getFillColor().a / e->get<CLifespan>().lifespamRemaining);
             e->get<CShape>().circle.setFillColor(
@@ -405,6 +504,10 @@ void Scene::sUserInput()
                 {
                     player->get<CInput>().shoot = true;
                 }
+                if (mouseButtonPressed->button == sf::Mouse::Button::Right)
+                {
+                    player->get<CInput>().special = true;
+                }
             }
         }
         if (const auto* mouseButtonReleased = event->getIf<sf::Event::MouseButtonReleased>())
@@ -414,6 +517,11 @@ void Scene::sUserInput()
                 if (mouseButtonReleased->button == sf::Mouse::Button::Left)
                 {
                     player->get<CInput>().shoot = false;
+                }
+
+                if (mouseButtonReleased->button == sf::Mouse::Button::Right)
+                {
+                    player->get<CInput>().special = false;
                 }
             }
         }
@@ -442,6 +550,21 @@ void Scene::sBulletSpawner()
 		if (player->get<CInput>().shoot)
 			spawnBullet();
         player->get<CInput>().shoot = false;
+    }
+}
+
+void Scene::sSpecialWeapon()
+{
+    std::shared_ptr<Entity> player = nullptr;
+    if (m_entities.getEntitiesByTag("player").size() > 0)
+    {
+	    player = m_entities.getEntitiesByTag("player")[0];
+        if (player->get<CInput>().special && m_specialWeaponCooldown == 3.0f)
+        {
+            spawnSpecialBullet();
+            m_specialWeaponCooldown = 0.0f;
+        }
+        player->get<CInput>().special = false;
     }
 }
 
@@ -477,36 +600,41 @@ void Scene::sCollision()
                 spawnPlayer();
             }
         
-        for (auto bullet : m_entities.getEntitiesByTag("bullet"))
+        for (auto bullet : m_entities.getEntities())
         {
-			auto& bulletCTransform = bullet->get<CTransform>();
-			auto& bulletCColision = bullet->get<CCollision>();
+            if (bullet->tag() == "bullet" || bullet->tag() == "special_bullet") {
+                auto& bulletCTransform = bullet->get<CTransform>();
+                auto& bulletCColision = bullet->get<CCollision>();
 
-            auto bulletToEnemyVector = enemyCTransform.pos - bulletCTransform.pos;
-            auto length = sqrtf(powf(bulletToEnemyVector.x, 2) + powf(bulletToEnemyVector.y, 2));
+                auto bulletToEnemyVector = enemyCTransform.pos - bulletCTransform.pos;
+                auto length = sqrtf(powf(bulletToEnemyVector.x, 2) + powf(bulletToEnemyVector.y, 2));
 
-            if (length < bulletCColision.radius + enemyCColision.radius)
-            {
-                spawnEnemyFragments(enemy);
-                enemy->destroy();
-                bullet->destroy();
+                if (length < bulletCColision.radius + enemyCColision.radius)
+                {
+                    spawnEnemyFragments(enemy);
+                    enemy->destroy();
+                    bullet->destroy();
+                }
             }
         }
     }
     for(auto enemyFragment : m_entities.getEntitiesByTag("enemy_fragment"))
     { 
-        for (auto bullet : m_entities.getEntitiesByTag("bullet"))
+        for (auto bullet : m_entities.getEntities())
         {
-			auto& bulletCTransform = bullet->get<CTransform>();
-			auto& bulletCColision = bullet->get<CCollision>();
-
-            auto bulletToEnemyVector = enemyFragment->get<CTransform>().pos - bulletCTransform.pos;
-            auto length = sqrtf(powf(bulletToEnemyVector.x, 2) + powf(bulletToEnemyVector.y, 2));
-
-            if (length < bulletCColision.radius + enemyFragment->get<CCollision>().radius)
+            if (bullet->tag() == "bullet" || bullet->tag() == "special_bullet")
             {
-                enemyFragment->destroy();
-                bullet->destroy();
+                auto& bulletCTransform = bullet->get<CTransform>();
+                auto& bulletCColision = bullet->get<CCollision>();
+
+                auto bulletToEnemyVector = enemyFragment->get<CTransform>().pos - bulletCTransform.pos;
+                auto length = sqrtf(powf(bulletToEnemyVector.x, 2) + powf(bulletToEnemyVector.y, 2));
+
+                if (length < bulletCColision.radius + enemyFragment->get<CCollision>().radius)
+                {
+                    enemyFragment->destroy();
+                    bullet->destroy();
+                }
             }
         }
     }
@@ -573,6 +701,14 @@ void Scene::sGUI()
                     displayEntityInfoOnGui(e);
                 }
             }
+            if (ImGui::CollapsingHeader("special_bullet"))
+            {
+                for (auto e : m_entities.getEntitiesByTag("special_bullet"))
+                {
+                    displayEntityInfoOnGui(e);
+                }
+            }
+
 
             if (ImGui::CollapsingHeader("all entites"))
             {
@@ -623,19 +759,20 @@ void Scene::run()
     };
 
    sf::Text text(font, "0", m_config.font().fontSize);
-   sf::Text score(font, "0", m_config.font().fontSize);
+   sf::Text score(font, "Score: 0", m_config.font().fontSize);
 
     text.setFillColor(sf::Color(m_config.font().rgb[0], m_config.font().rgb[1], m_config.font().rgb[2]));
 
-    text.setPosition(sf::Vector2f(10.0f, 0.0f + (float)text.getCharacterSize()));
+    text.setPosition(sf::Vector2f(0.0f, 0.0f + (float)text.getCharacterSize()));
 
-    text.setFillColor(sf::Color(m_config.font().rgb[0], m_config.font().rgb[1], m_config.font().rgb[2]));
+    score.setFillColor(sf::Color(m_config.font().rgb[0], m_config.font().rgb[1], m_config.font().rgb[2]));
 
-    text.setPosition(sf::Vector2f(20.0f, 0.0f + (float)text.getCharacterSize()));
+    score.setPosition(sf::Vector2f(m_config.window().width / 2, 0.0f + (float)text.getCharacterSize()));
 
     spawnPlayer();
 
     int framePassed{};
+    int framePassedForSpecialWeapon{};
     m_spawnRate = m_config.enemy().smallInterval;
 
     sf::Clock clock;
@@ -643,8 +780,8 @@ void Scene::run()
 
     srand(time(NULL));
     while (m_window.isOpen()) {
-        text.setString(std::to_string((int)(1.0f / clock.restart().asSeconds())));
-        score.setString(std::to_string((int)m_scoreTotal));
+        text.setString("FPS:" + std::to_string((int)(1.0f / clock.restart().asSeconds())));
+        score.setString("SCORE: " + std::to_string((int)m_scoreTotal));
         ImGui::SFML::Update(m_window, deltaClock.restart());
 
 		m_entities.update();
@@ -654,6 +791,8 @@ void Scene::run()
 			sMovement();
 		if (m_bulletSpawnerSystemEnabled && (!m_paused && m_running))
 			sBulletSpawner();
+		if (m_bulletSpawnerSystemEnabled && (!m_paused && m_running))
+			sSpecialWeapon();
 		if (m_enemySpawnerSystemEnabled && (!m_paused && m_running))
 			sEnemySpawner(framePassed);
 		sLifespan();
@@ -666,5 +805,12 @@ void Scene::run()
 
 		if (m_enemySpawnerSystemEnabled && (!m_paused && m_running))
 		    ++framePassed;
+
+        ++framePassedForSpecialWeapon;
+        if (framePassedForSpecialWeapon >= 60 && m_specialWeaponCooldown != 3.0f)
+        {
+            m_specialWeaponCooldown += 1.0f;
+            framePassedForSpecialWeapon = 0.0f;
+        }
      }
 };

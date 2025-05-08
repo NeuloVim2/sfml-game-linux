@@ -74,6 +74,7 @@ public:
 	bool right{};
 	bool left{};
 	bool shoot{};
+	bool special{};
 
 	CInput() {};
 	CInput(bool up, bool down, bool right, bool left, bool shoot)
