@@ -42,6 +42,7 @@ private:
 
 	void spawnPlayer();
 	void spawnEnemy();
+	void spawnEnemyFragments(std::shared_ptr<Entity> enemy);
 	void spawnBullet();
 	void displayEntityInfoOnGui(const std::shared_ptr<Entity> e);
 

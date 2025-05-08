@@ -119,6 +119,46 @@ void Scene::spawnEnemy()
     enemyCShape.circle.setOrigin(sf::Vector2f(enemyCShape.circle.getRadius(), enemyCShape.circle.getRadius()));
 }
 
+void Scene::spawnEnemyFragments(std::shared_ptr<Entity> enemy)
+{
+    auto angle = 360.0f / enemy->get<CShape>().circle.getPointCount();
+    auto currentAngle = 0.0f;
+
+    for (int i = 0; i < enemy->get<CShape>().circle.getPointCount(); i++)
+    { 
+		auto fragment = m_entities.addEntity("enemy_fragment");
+		auto& fragmentCTransfrom = fragment->add<CTransform>(
+			enemy->get<CTransform>().pos,
+			Vector2f(0.0f, 0.0f),
+			Vector2f(0.0f, 0.0f),
+			currentAngle
+
+		);
+		auto& fragmentCShape = fragment->add<CShape>(
+			sf::CircleShape{
+				enemy->get<CShape>().circle.getRadius() / 2,
+				enemy->get<CShape>().circle.getPointCount()
+			});
+		fragment->add<CCollision>(m_config.enemy().shapeConfig.collisionRadius);
+		fragment->add<CLifespan>(m_config.enemy().smallLifespan, m_config.enemy().smallLifespan);
+
+		fragmentCShape.circle.setFillColor(enemy->get<CShape>().circle.getFillColor());
+
+		// Set up colors and border thickness
+		fragmentCShape.circle.setOutlineColor(enemy->get<CShape>().circle.getOutlineColor());
+		fragmentCShape.circle.setOutlineThickness(enemy->get<CShape>().circle.getOutlineThickness());
+
+		fragmentCShape.circle.setOrigin(sf::Vector2f(fragmentCShape.circle.getRadius(), fragmentCShape.circle.getRadius()));
+
+		fragmentCTransfrom.vel = Vector2f(
+			1.0f * cosf(fragmentCTransfrom.angle),
+			1.0f * sinf(fragmentCTransfrom.angle)
+		);
+
+        currentAngle += angle;
+    }
+}
+
 void Scene::spawnBullet()
 {
     auto bullet = m_entities.addEntity("bullet");
@@ -220,6 +260,26 @@ void Scene::sMovement()
         );
     }
 
+    for (auto e : m_entities.getEntitiesByTag("enemy_fragment"))
+    {
+        auto enemyRadius = e->get<CShape>().circle.getRadius();
+
+        bool isTopBorder = e->get<CTransform>().pos.y - enemyRadius < 0;
+        bool isBottomBorder = e->get<CTransform>().pos.y + enemyRadius >= m_config.window().height;
+        bool isRightBorder = e->get<CTransform>().pos.x + enemyRadius >= m_config.window().width;
+        bool isLeftBorder = e->get<CTransform>().pos.x - enemyRadius < 0;
+
+        if (isTopBorder || isBottomBorder)
+            e->get<CTransform>().vel.y *= -1.0f;
+        if (isRightBorder || isLeftBorder)
+            e->get<CTransform>().vel.x *= -1.0f;
+
+        e->get<CTransform>().pos += e->get<CTransform>().vel;
+        e->get<CShape>().circle.setPosition(
+            e->get<CTransform>().pos
+        );
+    }
+
     if (m_entities.getEntitiesByTag("player").size() > 0)
     {
         for (auto e : m_entities.getEntitiesByTag("player"))
@@ -276,6 +336,12 @@ void Scene::sLifespan()
 			)
          );
 
+        e->get<CLifespan>().lifespamRemaining -= 1.0f;
+        if (e->get<CLifespan>().lifespamRemaining <= 0)
+            e->destroy();
+    }
+    for (auto e : m_entities.getEntitiesByTag("enemy_fragment"))
+    {
         e->get<CLifespan>().lifespamRemaining -= 1.0f;
         if (e->get<CLifespan>().lifespamRemaining <= 0)
             e->destroy();
@@ -392,6 +458,7 @@ void Scene::sCollision()
 
             if (playerToEnemyVectorLength < playerCColision.radius + enemyCColision.radius)
             {
+                spawnEnemyFragments(enemy);
                 enemy->destroy();
                 m_entities.getEntitiesByTag("player")[0]->destroy();
 
@@ -408,6 +475,7 @@ void Scene::sCollision()
 
             if (length < bulletCColision.radius + enemyCColision.radius)
             {
+                spawnEnemyFragments(enemy);
                 enemy->destroy();
                 bullet->destroy();
             }
