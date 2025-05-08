@@ -92,6 +92,8 @@ void Scene::spawnEnemy()
         0.0f
     );
 
+    enemy->add<CCollision>(m_config.enemy().shapeConfig.collisionRadius);
+
     float randomRedMax = m_config.enemy().shapeConfig.outlineColor[0];
     float randomGreenMax = m_config.enemy().shapeConfig.outlineColor[1];
     float randomBlueMax = m_config.enemy().shapeConfig.outlineColor[2];
@@ -135,6 +137,8 @@ void Scene::spawnBullet()
         m_config.bullet().lifespan,
         m_config.bullet().lifespan
     );
+
+    bullet->add<CCollision>(m_config.bullet().shapeConfig.collisionRadius);
 
     sf::Vector2i mousePos = sf::Mouse::getPosition(m_window);
     Vector2f differanceVector = Vector2f(
@@ -373,6 +377,41 @@ void Scene::sBulletSpawner()
     }
 }
 
+void Scene::sCollision()
+{
+    for (auto enemy : m_entities.getEntitiesByTag("enemy"))
+    {
+		auto& enemyCTransform = enemy->get<CTransform>();
+		auto& enemyCColision = enemy->get<CCollision>();
+
+		auto& playerCTransform = m_entities.getEntitiesByTag("player")[0]->get<CTransform>();
+		auto& playerCColision = m_entities.getEntitiesByTag("player")[0]->get<CCollision>();
+
+        auto playerToEnemyVector = enemyCTransform.pos - playerCTransform.pos;
+        auto playerToEnemyVectorLength = sqrtf(powf(playerToEnemyVector.x, 2) + powf(playerToEnemyVector.y, 2));
+
+            if (playerToEnemyVectorLength < playerCColision.radius + enemyCColision.radius)
+            {
+                enemy->destroy();
+            }
+        
+        for (auto bullet : m_entities.getEntitiesByTag("bullet"))
+        {
+			auto& bulletCTransform = bullet->get<CTransform>();
+			auto& bulletCColision = bullet->get<CCollision>();
+
+            auto bulletToEnemyVector = enemyCTransform.pos - bulletCTransform.pos;
+            auto length = sqrtf(powf(bulletToEnemyVector.x, 2) + powf(bulletToEnemyVector.y, 2));
+
+            if (length < bulletCColision.radius + enemyCColision.radius)
+            {
+                enemy->destroy();
+                bullet->destroy();
+            }
+        }
+    }
+}
+
 void Scene::sGUI()
 {
 	ImGui::Begin("Geometry Wars GUI");
@@ -503,6 +542,8 @@ void Scene::run()
         if(m_enemySpawnerSystemEnabled)
             sEnemySpawner(framePassed);
         sLifespan();
+        if(m_colisionSystemEnabled)
+            sCollision();
         if(m_GUISystemEnabled)
             sGUI();
         sRender(text);
