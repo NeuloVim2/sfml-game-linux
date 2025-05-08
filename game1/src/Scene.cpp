@@ -393,6 +393,9 @@ void Scene::sCollision()
             if (playerToEnemyVectorLength < playerCColision.radius + enemyCColision.radius)
             {
                 enemy->destroy();
+                m_entities.getEntitiesByTag("player")[0]->destroy();
+
+                spawnPlayer();
             }
         
         for (auto bullet : m_entities.getEntitiesByTag("bullet"))
