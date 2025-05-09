@@ -36,7 +36,10 @@ public:
 
 	}
 
-	sf::RenderWindow& window();
+	sf::RenderWindow& window()
+	{
+		return m_window;
+	};
 
 	~GameEngine();
 };
