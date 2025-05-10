@@ -14,21 +14,25 @@
 #include "ConfigParser.h"
 
 class Scene;
+enum SceneType {
+	main_menu,
+	level_one,
+};
 
-using SceneMap = std::unordered_map<std::string, std::shared_ptr<Scene>>;
+using SceneMap = std::unordered_map<SceneType, std::shared_ptr<Scene>>;
 class GameEngine 
 {
 private:
 	SceneMap m_scenes;
-	std::string m_scene;
+	SceneType m_scene;
 	bool m_running{ true };
 
 	sf::RenderWindow m_window{};
-	EntityManager m_entities{};
 	ConfigParser m_config{};
 
 
 	void init();
+	void sUserInput();
 public:
 	GameEngine()
 	{
@@ -46,12 +50,12 @@ public:
 	void quit();
 
 	template<class T>
-	void changeScene(std::string sceneName)
+	void changeScene(SceneType sceneType)
 	{
-		if (!m_scenes.contains(sceneName))
-			m_scenes[sceneName] = std::make_shared<T>();
+		if (!m_scenes.contains(sceneType))
+			m_scenes[sceneType] = std::make_shared<T>(this);
 
-		m_scene = sceneName;
+		m_scene = sceneType;
 	}
 
 	sf::RenderWindow& window()
@@ -59,12 +63,11 @@ public:
 		return m_window;
 	};
 
-	std::shared_ptr<Scene> currentString()
+	std::shared_ptr<Scene> currentScene()
 	{
 		return m_scenes[m_scene];
 	}
 
-	void sUserInput();
 	~GameEngine();
 };
 

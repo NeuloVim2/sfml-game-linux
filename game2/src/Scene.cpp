@@ -22,3 +22,7 @@ Scene::Scene(GameEngine* ge)
 	:m_gameEngine{ge}
 {
 }
+
+void Scene::simulate(int)
+{
+}

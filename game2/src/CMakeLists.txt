@@ -3,6 +3,8 @@ set(Sources
     Components.hpp 
     Scene.h 
     Scene.cpp 
+    SceneLevel.h 
+    SceneLevel.cpp 
     typedefs.h 
     GameEngine.h
     GameEngine.cpp

@@ -17,11 +17,6 @@
 
 class GameEngine;
 class Scene {
-public:
-	enum Type {
-		main_menu,
-		level_one,
-	};
 
 private:
 	GameEngine* m_gameEngine{};

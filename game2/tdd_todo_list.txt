@@ -1,38 +1,27 @@
-!!!!!!!!!!!
-v.length()
-v.normilize()
+add support or different scenes to GameEngine - done
 
-process case when scalar is int: 
- vector + 5
- vector - 5
+create basis of game archetecture
+add SceneLevel
+add SceneMenu
+add Action class to handle different commands
 
-Initiliaze vector with x and y equal to 0 when no default constructor called
- after vector(), vectro.x = 0 and vector.y = 0
 
-Add negate operation for vector: 
-  vector v = {x, y} and do -v => -v.x, -v.y 
-  vector v = {-x, y} and do -v => v.x, -v.y 
-  vector v = {x, -y} and do -v => -v.x, v.y 
-  vector v = {-x, -y} and do -v => v.x, v.y 
+Scene Basic
+ - do scene update
+ - do phisycs calculations
+ - register and do action accordingly to user input
 
-Compare two vector for equalaty
- vector1 == vector2
- vector1 != vector2
+Scene Derived
+ - do scene initialisation
+ - implement all specific systems for the Scene  
+ - implement sDoAction system
+ - do actual rendering of the scene
 
-fix issue with increased players' velocity when moving diagonally - done
-spawnBullet() in a direction of mouse - done
-move spawnBullet() in a dircetion of mouse - done
-generate enemies with different color - done
-display on GUI all existing entity; separate tab - done
-toggle on/off on GUI working system; separate tab - done
-decrease rate of bullets fire for player - done
-fix issue when bullet generated not from outter border of player - done
-fix issue when bullet velocity increase/decrease with players movement ?
-fade away spawned bullet when its slowly reaching its lifespan end - done
+Action
+ - perfomrm commands according to user input
 
-add enemy movement
-enemy bounce off the screen edges
-
-add lifspan to enemy entities
-
-display on GUI fps?
+GameEngine
+ - initilize window
+ - set and switch Scenes
+ - register user input
+ - start and quit game
