@@ -6,7 +6,7 @@
 #include <iostream>
 
 #include "GameEngine.h"
-#include "SceneLevel.h"
+#include "ScenePlay.h"
 
 void GameEngine::init()
 {
@@ -29,8 +29,8 @@ void GameEngine::init()
 void GameEngine::run()
 {
     //std::unique_ptr<Scene> scene = std::make_unique<Scene>(Scene::main_menu, this);
-	changeScene<SceneLevel>(SceneType::level_one);
-    //std::unique_ptr<Scene> scene = std::make_unique<SceneLevel>(this);
+	changeScene<ScenePlay>(SceneType::level_one);
+    //std::unique_ptr<Scene> scene = std::make_unique<ScenePlay>(this);
 
     //scene->run();
 

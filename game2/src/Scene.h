@@ -17,7 +17,6 @@
 
 class GameEngine;
 class Scene {
-
 private:
 	GameEngine* m_gameEngine{};
 	EntityManager m_entities{};
@@ -25,17 +24,11 @@ private:
 	std::unordered_map<int, std::string> m_actionMap{};
 	bool m_paused{true};
 
-public:
-	Scene(GameEngine* ge);
-	Scene() = default;
-	~Scene() 
-	{
-		std::cout << "Scene destructor is called" << std::endl;
-	};
-
-	void virtual update() = 0;
 	void virtual sDoAction(std::string action) = 0;
 	void virtual sRender() = 0;
+
+public:
+	void virtual update() = 0;
 
 	void simulate(int);
 	void doAction(std::string);
@@ -44,6 +37,13 @@ public:
 	GameEngine* gameEngine()
 	{
 		return m_gameEngine;
+	};
+
+	Scene(GameEngine* ge);
+	Scene() = default;
+	~Scene() 
+	{
+		std::cout << "Scene destructor is called" << std::endl;
 	};
 };
 

@@ -1,7 +1,7 @@
 add support or different scenes to GameEngine - done
 
 create basis of game archetecture
-add SceneLevel
+add ScenePlay - partially done
 add SceneMenu
 add Action class to handle different commands
 
