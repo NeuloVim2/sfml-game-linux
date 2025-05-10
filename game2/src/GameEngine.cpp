@@ -28,9 +28,11 @@ void GameEngine::init()
 
 void GameEngine::run()
 {
-    std::unique_ptr<Scene> scene = std::make_unique<Scene>(Scene::main_menu, m_window, m_entities, m_config);
+    //std::unique_ptr<Scene> scene = std::make_unique<Scene>(Scene::main_menu, this);
+    std::unique_ptr<Scene> scene = std::make_unique<Scene>(this);
 
-    scene->run();
+	scene->gameEngine()->sayHello();
+    //scene->run();
 
 }
 GameEngine::~GameEngine()
