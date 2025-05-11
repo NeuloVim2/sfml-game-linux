@@ -3,6 +3,7 @@
 #include <string>
 
 #include "Scene.h"
+#include "Action.hpp"
 
 class ScenePlay : public Scene
 {
@@ -15,11 +16,11 @@ private:
 	void sMovement();
 	void sEnemySpawner();
 	void sCollision();
-	void sDoAction(std::string action) override;
 	void sRender() override;
 	void sGUI();
 
 public:
+	void sDoAction(Action& action) override;
 	void update() override;
 
 	ScenePlay(GameEngine* ge)

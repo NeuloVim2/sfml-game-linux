@@ -15,6 +15,8 @@ set(Sources
     ConfigParser.h
     ConfigParser.cpp
     Action.hpp
+    SceneMenu.h
+    SceneMenu.cpp
 )
 
 add_library(vector Vector2f.cpp)

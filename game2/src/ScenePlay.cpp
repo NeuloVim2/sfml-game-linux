@@ -4,7 +4,7 @@ void ScenePlay::update()
 {
 }
 
-void ScenePlay::sDoAction(std::string action)
+void ScenePlay::sDoAction(Action& action)
 {
 }
 

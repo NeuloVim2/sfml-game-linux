@@ -8,26 +8,29 @@ class Action
 public:
 	enum Name
 	{
-		NONE,
-		Up
+		NAME_NONE,
+		UP,
+		DOWN,
+		PLAY,
+		QUIT
 	};
 
 	enum Phase 
 	{
-		NONE,
+		PHASE_NONE,
 		START,
 		END
 	};
 
 private:
-	Name m_name{ Name::NONE };
-	Phase m_Phase{ Phase::NONE };
+	Name m_name{ Name::NAME_NONE };
+	Phase m_phase{ Phase::PHASE_NONE };
 
 public:
 	Action() = default;
 	~Action() = default;
 	Action(const Name name, const Phase Phase)
-		: m_name(name), m_Phase(Phase)
+		: m_name(name), m_phase(Phase)
 	{};
 
 	const Name& name() const
@@ -37,7 +40,7 @@ public:
 
 	const Phase& phase() const
 	{
-		return m_Phase;
+		return m_phase;
 	};
 };
 
