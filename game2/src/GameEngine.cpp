@@ -50,7 +50,7 @@ void GameEngine::sUserInput()
 
 		if (keyPressed)
 		{
-			if (currentScene()->keyboardActionMap().contains(keyPressed->scancode))
+			if (!currentScene()->keyboardActionMap().contains(keyPressed->scancode))
 				continue;
 
 			Action action(currentScene()->keyboardActionMap().at(keyPressed->scancode), Action::Phase::START);
@@ -59,7 +59,7 @@ void GameEngine::sUserInput()
 
 		if (keyReleased)
 		{
-			if (currentScene()->keyboardActionMap().contains(keyReleased->scancode))
+			if (!currentScene()->keyboardActionMap().contains(keyReleased->scancode))
 				continue;
 
 			Action action(currentScene()->keyboardActionMap().at(keyReleased->scancode), Action::Phase::END);
@@ -68,7 +68,7 @@ void GameEngine::sUserInput()
 
 		if (mouseButtonPressed)
 		{
-			if (currentScene()->mouseActionMap().contains(mouseButtonPressed->button))
+			if (!currentScene()->mouseActionMap().contains(mouseButtonPressed->button))
 				continue;
 
 			Action action(currentScene()->mouseActionMap().at(mouseButtonPressed->button), Action::Phase::START);
@@ -77,7 +77,7 @@ void GameEngine::sUserInput()
 
 		if (mouseButtonReleased)
 		{
-			if (currentScene()->mouseActionMap().contains(mouseButtonReleased->button))
+			if (!currentScene()->mouseActionMap().contains(mouseButtonReleased->button))
 				continue;
 
 			Action action(currentScene()->mouseActionMap().at(mouseButtonReleased->button), Action::Phase::END);
