@@ -63,6 +63,11 @@ public:
 		return m_window;
 	};
 
+	ConfigParser& config()
+	{
+		return m_config;
+	};
+
 	std::shared_ptr<Scene> currentScene()
 	{
 		return m_scenes[m_scene];

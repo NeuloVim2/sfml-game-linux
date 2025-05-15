@@ -21,7 +21,7 @@ using MouseActionMap = std::unordered_map<sf::Mouse::Button, Action::Name>;
 
 class GameEngine;
 class Scene {
-private:
+protected:
 	GameEngine* m_gameEngine{};
 	EntityManager m_entities{};
 	int m_frame{};

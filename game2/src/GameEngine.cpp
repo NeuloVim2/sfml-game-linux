@@ -89,17 +89,24 @@ void GameEngine::sUserInput()
 void GameEngine::run()
 {
     //std::unique_ptr<Scene> scene = std::make_unique<Scene>(Scene::main_menu, this);
-	changeScene<ScenePlay>(SceneType::level_one);
+	changeScene<SceneMenu>(SceneType::main_menu);
     //std::unique_ptr<Scene> scene = std::make_unique<ScenePlay>(this);
 
     //scene->run();
 
 }
+
 void GameEngine::update()
 {
-	currentScene()->gameEngine()->sayHello();
-	currentScene()->simulate(1);
+	while (m_window.isOpen())
+	{
+		sUserInput();
+		currentScene()->update();
+	}
+	//currentScene()->gameEngine()->sayHello();
+	//currentScene()->simulate(1);
 }
+
 GameEngine::~GameEngine()
 {
 	std::cout << "GameEngine descturctor is called" << std::endl;
