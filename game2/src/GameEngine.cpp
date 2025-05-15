@@ -37,15 +37,16 @@ void GameEngine::sUserInput()
 
 		ImGui::SFML::ProcessEvent(m_window, *event);
 		auto& io = ImGui::GetIO();
-		
+
+		// Block user input for Game if ImGui window focused
+		if (io.WantCaptureKeyboard)
+			continue;
+
 		const auto* keyPressed = event->getIf<sf::Event::KeyPressed>();
 		const auto* keyReleased = event->getIf<sf::Event::KeyReleased>();
 		const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>();
 		const auto* mouseButtonReleased = event->getIf<sf::Event::MouseButtonReleased>();
 
-		// Block user input for Game if ImGui window focused
-		if (io.WantCaptureKeyboard)
-			return;
 
 		if (keyPressed)
 		{
