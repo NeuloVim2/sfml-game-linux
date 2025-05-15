@@ -26,8 +26,8 @@
             "binaryDir": "${sourceDir}/build/${presetName}",
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
-                "CMAKE_C_COMPILER": "C:/msys64/ucrt64/bin/gcc.exe",
-                "CMAKE_CXX_COMPILER": "C:/msys64/ucrt64/bin/g++.exe",
+                "CMAKE_C_COMPILER": "C:\\ProgramData\\mingw64\\mingw64\\bin\\gcc.exe",
+                "CMAKE_CXX_COMPILER": "C:\\ProgramData\\mingw64\\mingw64\\bin\\g++.exe",
                 "CMAKE_BUILD_TYPE": "Debug"
             },
             "condition": {
@@ -63,7 +63,14 @@
             "displayName": "Windows Visual Studio 22 debug build",
             "configurePreset": "WinVisualStudio22 debug",
             "configuration": "Debug"
+        },
+        {
+            "name": "WinGcc build",
+            "displayName": "Windws g++",
+            "configurePreset": "WinGcc",
+            "configuration": "Debug"
         }
+
     ],
     "testPresets": [
         {

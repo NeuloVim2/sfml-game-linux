@@ -1,6 +1,6 @@
 cmake_minimum_required(
     VERSION 
-    3.28.0
+    3.28.0...4.0
 )
 
 project(game1
@@ -26,7 +26,7 @@ add_subdirectory(test)
 add_custom_target(copy_resources ALL
             COMMAND ${CMAKE_COMMAND} -E copy_directory
             ${PROJECT_SOURCE_DIR}/resources
-            ${PROJECT_BINARY_DIR}/src/Debug/resources
+            ${PROJECT_BINARY_DIR}/src/resources
             COMMENT "Copying resources into binary directory")
 
 message("project source dir: ${PROJECT_SOURCE_DIR}")
@@ -35,7 +35,7 @@ message("project binary dir: ${PROJECT_BINARY_DIR}")
 add_custom_target(copy_config ALL
             COMMAND ${CMAKE_COMMAND} -E copy
             ${PROJECT_SOURCE_DIR}/src/config.txt
-            ${PROJECT_BINARY_DIR}/src/Debug/config.txt
+            ${PROJECT_BINARY_DIR}/src/config.txt
             COMMENT "Copying config into binary directory")
 add_dependencies(game copy_resources)
 add_dependencies(game copy_config)
