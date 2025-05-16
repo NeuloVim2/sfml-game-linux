@@ -34,6 +34,7 @@ void SceneMenu::sDoAction(Action& action)
 
 void SceneMenu::sRender()
 {
+	m_gameEngine->window().clear(m_background);
 	m_gameEngine->window().clear();
 
 	for (auto e : m_entities.getEntities())

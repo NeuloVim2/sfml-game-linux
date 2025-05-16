@@ -1,9 +1,15 @@
 add support or different scenes to GameEngine - done
+add SceneMenu - done
+add ScenePlay - done
+add Action class to handle different commands - done
 
 create basis of game archetecture
-add ScenePlay - partially done
-add SceneMenu
-add Action class to handle different commands
+add Assets manager
+
+add blueish background color for main_menu
+add menu options to main_menu
+ - LEVEL 1
+ - QUIT
 
 
 Scene Basic
@@ -25,3 +31,7 @@ GameEngine
  - set and switch Scenes
  - register user input
  - start and quit game
+
+BUILD(run from .\game2\build\WinGcc\src\): cmake --build "D:\sfml_projects\Project2\sfml-game-linux\game2\build\WinGcc" ; .\game.exe
+
+CONFIGURE: cmake --preset="WinGcc"
