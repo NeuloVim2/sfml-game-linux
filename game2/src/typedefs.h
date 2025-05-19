@@ -15,5 +15,6 @@ using ComponentTuple = std::tuple<
 	CScore,
 	CShape,
 	CInput,
+	CText,
 	CLifespan
 >;

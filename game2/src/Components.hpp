@@ -1,6 +1,10 @@
 #pragma once
 
+#include <string>
+
 #include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Graphics/Text.hpp>
+#include <SFML/Graphics/Font.hpp>
 
 #include "Vector2f.h"
 
@@ -9,6 +13,18 @@ class Component
 public:
 	bool exists = false;
 	Component() {};
+};
+
+class CText: public Component
+{
+public:
+  sf::Text text;
+
+  CText(const sf::Font& font = sf::Font(), const std::string& str = "", unsigned int characterSize = 30) : text{font} 
+  {
+    text.setString(str);
+    text.setCharacterSize(characterSize);
+  };
 };
 
 class CTransform: public Component {

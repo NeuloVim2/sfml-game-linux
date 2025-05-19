@@ -35,7 +35,6 @@ void SceneMenu::sDoAction(Action& action)
 void SceneMenu::sRender()
 {
 	m_gameEngine->window().clear(m_background);
-	m_gameEngine->window().clear();
 
 	for (auto e : m_entities.getEntities())
 	{
@@ -45,8 +44,13 @@ void SceneMenu::sRender()
 		m_gameEngine->window().draw(e->get<CShape>().circle);
 	}
 
-	ImGui::SFML::Render(m_gameEngine->window());
-	m_gameEngine->window().display();
+  for(auto e : m_entities.getEntitiesByTag("menu_option"))
+  {
+	  m_gameEngine->window().draw(e->get<CText>().text);
+  }
+
+    ImGui::SFML::Render(m_gameEngine->window());
+    m_gameEngine->window().display();
 }
 
 void SceneMenu::sGUI(sf::Clock& clock)
@@ -179,6 +183,27 @@ void SceneMenu::spawnPlayer()
   playerCShape.circle.setPosition(playerCTransform.pos);
 }
 
+void SceneMenu::addMenuOption(const std::string msg, const Vector2f& pos)
+{
+    auto menuOption = m_entities.addEntity("menu_option");
+    auto& textC = menuOption->add<CText>(
+        m_font,
+        msg,
+        static_cast<unsigned int>(100)
+    );
+
+    textC.text.setFillColor(sf::Color::White);
+
+    auto& transformC = menuOption->add<CTransform>(
+        pos,
+        Vector2f{ 0.0f, 0.0f },
+        Vector2f{ 0.0f, 0.0f },
+        0.0f
+  ); 
+
+  textC.text.setPosition(sf::Vector2f(pos.x, pos.y));
+};
+
 void SceneMenu::init()
 {
     registerKeyboardAction(sf::Keyboard::Scan::W, Action::UP);
@@ -186,7 +211,19 @@ void SceneMenu::init()
     registerKeyboardAction(sf::Keyboard::Scan::Enter, Action::PLAY);
     registerKeyboardAction(sf::Keyboard::Scan::Escape, Action::QUIT);
 
-    spawnPlayer();
+
+    std::cout << "Executable absolute path is " << std::filesystem::current_path() << std::endl;
+
+    if (!m_font.openFromFile(m_gameEngine->config().font().fontFile)) 
+    {
+        std::cerr << "Could not load font!\n";
+        exit(-1);
+    };
+
+
+    addMenuOption("LEVEL 1", Vector2f{100.0f, 100.0f});
+    addMenuOption("QUIT", Vector2f{100.0f, 200.0f});
+    // spawnPlayer();
 }
 
 void SceneMenu::update()
