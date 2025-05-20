@@ -15,6 +15,18 @@ public:
 	Component() {};
 };
 
+class CSelect: public Component
+{
+public:
+  int prev;
+  int next;
+  bool select = false;
+
+  CSelect(bool select = false, int prev = 0, int next = 0)
+    : select{select}, prev{prev}, next{next} 
+  {};
+};
+
 class CText: public Component
 {
 public:

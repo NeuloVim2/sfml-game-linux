@@ -29,9 +29,22 @@ void SceneMenu::sDoAction(Action& action)
         nextOption->get<CSelect>().select = true;
         m_currentOption = nextOption;
 				break;
+
+			case Action::Name::PLAY:
+				std::cout << "PLAY actoin started" << std::endl;
+        if(m_currentOption->get<CText>().text.getString() == "LEVEL 1")
+          std::cout << "Launch LEVEL 1" << std::endl;
+
+        if(m_currentOption->get<CText>().text.getString() == "QUIT")
+        {
+          std::cout << "QUIT the game" << std::endl;
+          m_gameEngine->window().close();
+        }
+        break;
+
 			case Action::Name::QUIT:
 				std::cout << "QUIT actoin started" << std::endl;
-                m_gameEngine->window().close();
+        m_gameEngine->window().close();
 				break;
 		};
 
