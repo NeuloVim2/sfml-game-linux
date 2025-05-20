@@ -2,16 +2,19 @@ add support or different scenes to GameEngine - done
 add SceneMenu - done
 add ScenePlay - done
 add Action class to handle different commands - done
+add blueish background color for main_menu - done
+add menu options to main_menu - done
+ - LEVEL 1
+ - QUIT
+add CText component - done
+make main_menu options salactable - done
+quit the game on QUIT menu_option select - done
 
 create basis of game archetecture
 add Assets manager
+open level 1 scene on LEVEL 1 menu_option select
 
-add blueish background color for main_menu
-add menu options to main_menu
- - LEVEL 1
- - QUIT
-
-
+=================================================
 Scene Basic
  - do scene update
  - do phisycs calculations

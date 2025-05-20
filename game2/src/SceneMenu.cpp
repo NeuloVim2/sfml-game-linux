@@ -5,14 +5,29 @@
 
 void SceneMenu::sDoAction(Action& action)
 {
-	if (action.phase() == Action::Phase::START)
+  auto entities = m_entities.getEntitiesByTag("menu_option");
+  auto prevOption = entities[m_currentOption->get<CSelect>().prev];
+  auto nextOption = entities[m_currentOption->get<CSelect>().next];
+
+  if (action.phase() == Action::Phase::START)
 		switch (action.name())
 		{
 			case Action::Name::UP:
 				std::cout << "UP actoin started" << std::endl;
+        m_currentOption->get<CSelect>().select = false;
+        m_currentOption->get<CText>().text.setFillColor(m_optionColor);
+
+        prevOption->get<CSelect>().select = true;
+        m_currentOption = prevOption;
 				break;
+
 			case Action::Name::DOWN:
 				std::cout << "DOWN actoin started" << std::endl;
+        m_currentOption->get<CSelect>().select = false;
+        m_currentOption->get<CText>().text.setFillColor(m_optionColor);
+
+        nextOption->get<CSelect>().select = true;
+        m_currentOption = nextOption;
 				break;
 			case Action::Name::QUIT:
 				std::cout << "QUIT actoin started" << std::endl;
@@ -30,6 +45,15 @@ void SceneMenu::sDoAction(Action& action)
 				std::cout << "DOWN actoin ended" << std::endl;
 				break;
 		};
+}
+
+void SceneMenu::sSelect()
+{
+  for (auto e : m_entities.getEntitiesByTag("menu_option"))
+  {
+    if(e->get<CSelect>().select) 
+      e->get<CText>().text.setFillColor(m_optionSelectedColor);
+  }
 }
 
 void SceneMenu::sRender()
@@ -55,8 +79,8 @@ void SceneMenu::sRender()
 
 void SceneMenu::sGUI(sf::Clock& clock)
 {
-    ImGui::Begin("Geometry Wars GUI");
-    ImGui::Text("Geometry Wars");
+    ImGui::Begin("MegaMario GUI");
+    ImGui::Text("MegaMario");
     ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
 //     if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))
 //     {
@@ -183,7 +207,7 @@ void SceneMenu::spawnPlayer()
   playerCShape.circle.setPosition(playerCTransform.pos);
 }
 
-void SceneMenu::addMenuOption(const std::string msg, const Vector2f& pos)
+void SceneMenu::addMenuOption(const std::string msg, const Vector2f& pos, bool select, int prev, int next)
 {
     auto menuOption = m_entities.addEntity("menu_option");
     auto& textC = menuOption->add<CText>(
@@ -192,7 +216,7 @@ void SceneMenu::addMenuOption(const std::string msg, const Vector2f& pos)
         static_cast<unsigned int>(100)
     );
 
-    textC.text.setFillColor(sf::Color::White);
+    textC.text.setFillColor(m_optionColor);
 
     auto& transformC = menuOption->add<CTransform>(
         pos,
@@ -202,6 +226,15 @@ void SceneMenu::addMenuOption(const std::string msg, const Vector2f& pos)
   ); 
 
   textC.text.setPosition(sf::Vector2f(pos.x, pos.y));
+
+  auto& selectC = menuOption->add<CSelect>(
+      select, 
+      prev, 
+      next
+  );
+
+  if(select)
+    m_currentOption = menuOption;
 };
 
 void SceneMenu::init()
@@ -211,7 +244,6 @@ void SceneMenu::init()
     registerKeyboardAction(sf::Keyboard::Scan::Enter, Action::PLAY);
     registerKeyboardAction(sf::Keyboard::Scan::Escape, Action::QUIT);
 
-
     std::cout << "Executable absolute path is " << std::filesystem::current_path() << std::endl;
 
     if (!m_font.openFromFile(m_gameEngine->config().font().fontFile)) 
@@ -220,9 +252,9 @@ void SceneMenu::init()
         exit(-1);
     };
 
+    addMenuOption("LEVEL 1", Vector2f{100.0f, 100.0f}, true, 1, 1);
+    addMenuOption("QUIT", Vector2f{100.0f, 200.0f}, false, 0, 0);
 
-    addMenuOption("LEVEL 1", Vector2f{100.0f, 100.0f});
-    addMenuOption("QUIT", Vector2f{100.0f, 200.0f});
     // spawnPlayer();
 }
 
@@ -230,7 +262,8 @@ void SceneMenu::update()
 {
     ImGui::SFML::Update(m_gameEngine->window(), m_clock.restart());
 
-	m_entities.update();
-    sGUI(m_clock);
+  m_entities.update();
+  sSelect();
+  sGUI(m_clock);
 	sRender();
 }

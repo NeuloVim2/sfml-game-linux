@@ -16,5 +16,6 @@ using ComponentTuple = std::tuple<
 	CShape,
 	CInput,
 	CText,
+	CSelect,
 	CLifespan
 >;
